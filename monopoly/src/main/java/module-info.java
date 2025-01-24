@@ -6,4 +6,6 @@ module org.example.demo {
 
     opens screens to javafx.fxml;
     exports screens;
+    exports controllers;
+    opens controllers to javafx.fxml;
 }
