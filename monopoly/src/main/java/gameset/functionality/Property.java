@@ -46,6 +46,7 @@ public class Property {
     public String getType() {return this.type; }
     public String getColor() {return this.color; }
     public int getMortgage() { return this.mortgage; }
+    public int getNumHouses() { return this.numHouses; }
 
     public void setOwner(final String owner) {
         this.owner = owner;
@@ -110,14 +111,15 @@ public class Property {
             rent = buildingPrices.get(numHouses);
             System.out.println("Purchased a house for: " + getPropertyAnsiColor() + name + Ansi.ANSI_RESET);
         } else if (numHouses == 4 && !hasHotel) {
-            buildHotel();  // Upgrade to hotel when 4 houses are built
+            numHouses++;
+            buildHotel();// Upgrade to hotel when 4 houses are built
         }
         else {
             System.out.println("Unable to purchase house");
         }
     }
 
-    public void buildHotel() {
+    private void buildHotel() {
         if(numHouses == 4 && !hasHotel) {
             hasHotel = true;
             rent = buildingPrices.get(numHouses + 1);

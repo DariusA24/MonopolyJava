@@ -43,18 +43,18 @@ public class Game {
            if (cost - player.getMoney() >= 0) {
                player.setMoney(player.getMoney() - cost);
                property.buildHouse();
+               System.out.println("You purchased your " + property.getNumHouses() + " houses of " + property.displayPropertyName());
            }
         }
         else {
-            System.out.println("Unable to purchase building.");
+            System.out.println("Unable to purchase building due to you not having all colorset for: " + property.getColor());
         }
     }
 
     private void displayPropertyScreen(Player player) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("******************");
-        System.out.println("Select property number you would like to view more detail on: \n" +
-                            "Press F to exit property screen");
+        System.out.println("Select property number you would like to view more detail on OR f to exit");
         boolean flag = false;
         while (!flag) {
             String input = scanner.nextLine();
@@ -68,6 +68,23 @@ public class Game {
                    Property property = player.getProperties().get(number - 1);
                    System.out.println("Property #" + number + ": " +  property.displayPropertyName());
                    property.displayPropertyInfo();
+                   if (property.getNumHouses() != 5){
+                       System.out.println("You currently own: " + property.getNumHouses() + " houses");
+                       System.out.println("Press B to purchase next building for: $" + property.getBuildingPrice());
+                       while(true) {
+                           input = scanner.nextLine();
+                           if(input.equals("B") || input.equals("b")){
+                               purchaseBuildings(property, player);
+                           }
+                           else {
+                               break;
+                           }
+                       }
+                   }
+                   else if (property.getNumHouses() == 5){
+                       System.out.println("You currently own a hotel on this property");
+                   }
+                  break;
                }
            }
            catch (NumberFormatException e) {
