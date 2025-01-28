@@ -1,9 +1,7 @@
 package gameset.functionality;
 
 import gameset.screens.Start;
-
 import java.io.FileNotFoundException;
-
 import static java.lang.System.exit;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or

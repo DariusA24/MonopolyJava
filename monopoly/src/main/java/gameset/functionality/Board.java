@@ -27,6 +27,10 @@ public class Board {
         System.out.println(" Passed Go, Collect: " + Ansi.ANSI_GREEN + " $200 " + Ansi.ANSI_RESET);
     }
 
+    public Long getPropertiesColorCount(String color) {
+        return gameBoard.stream().filter(property -> property.getColor().equals(color)).count();
+    }
+
     public void updatedBoardLocation(int previousLocation, int newLocation, String playerColoredName){
        boardScreen.updatePlayerPositionOnBoard(gameBoard.get(previousLocation).getName(), gameBoard.get(newLocation).getName(), playerColoredName);
     }

@@ -3,23 +3,22 @@ package gameset.functionality;
 import gameutils.Ansi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Player {
 
-    private String name;
+    Board board = new Board();
+    private final String name;
     private int playerMoney;
-
     private final String color;
-
     private int location;
-    private final List<Property> properties = new ArrayList<Property>();
-
     private boolean inJail;
-
     private int doubleRollCounter;
     public int railRoadCounter;
-    
+    private final List<Property> properties = new ArrayList<Property>();
+    private final Map<String, Boolean> colorSets = new HashMap<String, Boolean>();
 
     public Player(String name, int money, String color){
         this.name = name;
@@ -66,8 +65,32 @@ public class Player {
         }
     }
 
+    public boolean canPurchaseProperty(String color){
+        if(colorSets.containsKey(color)){
+            return colorSets.get(color);
+        }
+        return false;
+    }
+
     public void addProperty(Property property){
         this.properties.add(property);
+        colorSets.put(property.getColor(), hasMonopoly(property));
+    }
+
+    private boolean hasMonopoly(Property property) {
+        String color = property.getColor();
+
+        long ownedColorProperties = properties.stream()
+                .filter(p -> p.getColor().equals(color))
+                .count();
+
+        long totalColorProperties = (long) getPropertiesByColor(color);
+
+        return ownedColorProperties == totalColorProperties;
+    }
+
+    private long getPropertiesByColor(String color) {
+      return board.getPropertiesColorCount(color);
     }
 
     public void addMoney(int money){
@@ -93,12 +116,12 @@ public class Player {
         return true;
     }
 
-    public void displayPropertes(){
+    public void displayProperties(){
+        int propertyCounter = 1;
         System.out.println("----------------------");
         System.out.println("Your properties are: ");
         for(Property property : properties){
-            System.out.println(property.displayPropertyName(property));
-            System.out.println(" - Rent: " + property.getRent() + "\n");
+            System.out.println(propertyCounter + ". " + property.displayPropertyName());
         }
         System.out.println("----------------------");
     }

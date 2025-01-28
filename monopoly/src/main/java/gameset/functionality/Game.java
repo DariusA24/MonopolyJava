@@ -8,14 +8,9 @@ import java.util.*;
 
 public class Game {
     private ArrayList<Player> playerList = new ArrayList<Player>();
-
     private final Dice dice = new Dice();
-
-
     private Scanner userInput = new Scanner(System.in);
-
     private boolean rollAgain = false;
-
     private GameScreen gameScreen = new GameScreen();
     private GameInitializer gameInitializer = new GameInitializer();
 
@@ -38,6 +33,53 @@ public class Game {
     }
 
     /**
+     * Purchases the hotel / building if able
+     * @param property
+     * @param player
+     */
+    private void purchaseBuildings(Property property, Player player) {
+        if (player.canPurchaseProperty(property.getColor())) {
+           int cost = property.getBuildingPrice();
+           if (cost - player.getMoney() >= 0) {
+               player.setMoney(player.getMoney() - cost);
+               property.buildHouse();
+           }
+        }
+        else {
+            System.out.println("Unable to purchase building.");
+        }
+    }
+
+    private void displayPropertyScreen(Player player) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("******************");
+        System.out.println("Select property number you would like to view more detail on: \n" +
+                            "Press F to exit property screen");
+        boolean flag = false;
+        while (!flag) {
+            String input = scanner.nextLine();
+            if (input.equals("F") || input.equals("f")) {
+                flag = true;
+                continue;
+            }
+           try {
+               int number = Integer.parseInt(input);
+               if (number >= 1 && number <= player.getProperties().size()) {
+                   Property property = player.getProperties().get(number - 1);
+                   System.out.println("Property #" + number + ": " +  property.displayPropertyName());
+                   property.displayPropertyInfo();
+               }
+           }
+           catch (NumberFormatException e) {
+               System.out.println("Please enter a valid number");
+
+           }
+        }
+        scanner.close();
+        System.out.println("******************");
+    }
+
+    /**
      *
      * @param property
      * @param player
@@ -54,8 +96,9 @@ public class Game {
                 if(player.checkBalance(property.getPrice())){
                     player.addProperty(property);
                     player.setMoney(player.getMoney() - property.getPrice());
-                    System.out.println("Purchasing: " + property.displayPropertyName(property));
+                    System.out.println("Purchasing: " + property.displayPropertyName());
                     System.out.println("Player balance is: " + Ansi.ANSI_GREEN + player.getMoney() + Ansi.ANSI_RESET);
+                    property.setOwner(player.getName());
                 }
                 flag = true;
 
@@ -84,7 +127,6 @@ public class Game {
             if(input.equals("E") || input.equals("e")) {
                 property.displayProperty(property);
                 purchaseProperty(property, player);
-
             }
         }
         else{
@@ -104,7 +146,7 @@ public class Game {
      */
     private void handlePlayerLanding(int landingSpot, Player player, Board board) {
         Property property = board.gameBoard.get(landingSpot);
-        System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Landed on " + property.displayPropertyName(property));
+        System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Landed on " + property.displayPropertyName());
         System.out.println("---------------");
         String propertyType = property.getType();
         if (propertyType.equals("property")){
@@ -139,6 +181,7 @@ public class Game {
                  if(dice.doubles) {
                   player.displayColoredName();
                   System.out.println("Rolled doubles and escaped jail!");
+                  player.leaveJail();
                   }
                  else {
                  player.displayColoredName();
@@ -159,6 +202,7 @@ public class Game {
                   System.out.println("New balance: ");
                   player.addMoney(-50);
                   System.out.println(player.getMoney());
+                  player.leaveJail();
                   jailChoiceFlag = false;
              }
         }
@@ -212,7 +256,10 @@ public class Game {
         String choice = gameScreen.turnMenu();
         while(!choice.equals("1")){
             if(choice.equals("2")){
-                player.displayPropertes();
+                player.displayProperties();
+                if(!player.getProperties().isEmpty()) {
+                    displayPropertyScreen(player);
+                }
             }
             if(choice.equals("3")){
                 System.out.println("Choice not yet made");

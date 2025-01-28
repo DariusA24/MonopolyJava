@@ -10,7 +10,7 @@ public class StartMenuController {
     @FXML
     private void handleStartSubmit() throws IOException {
        GameApplication gameApplication = new GameApplication();
-       gameApplication.playerCreation();
+        //gameApplication.playerCreation();
     }
 
     @FXML
