@@ -10,7 +10,7 @@ public class StartMenuController {
     @FXML
     private void handleStartSubmit() throws IOException {
        GameApplication gameApplication = new GameApplication();
-       gameApplication.playerCreation();
+       // TODO: causing error for me when running terminal app (gameApplication.playerCreation();)
     }
 
     @FXML

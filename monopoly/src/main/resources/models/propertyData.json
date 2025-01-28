@@ -1,0 +1,281 @@
+[
+  {
+    "name": "Go",
+    "type": "space",
+    "price": 0,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "Mediterranean Ave.",
+    "type": "property",
+    "price": 60,
+    "rent": 2,
+    "color": "brown"
+  },
+  {
+    "name": "Community Chest",
+    "type": "card",
+    "price": 0,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "Baltic Ave.",
+    "type": "property",
+    "price": 60,
+    "rent": 4,
+    "color": "brown"
+  },
+  {
+    "name": "Income Tax",
+    "type": "tax",
+    "price": 0,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "Reading Railroad",
+    "type": "railroad",
+    "price": 200,
+    "rent": 25,
+    "color": ""
+  },
+  {
+    "name": "Oriental Ave.",
+    "type": "property",
+    "price": 100,
+    "rent": 6,
+    "color": "cyan"
+  },
+  {
+    "name": "Chance",
+    "type": "card",
+    "price": 0,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "Vermont Ave.",
+    "type": "property",
+    "price": 100,
+    "rent": 6,
+    "color": "cyan"
+  },
+  {
+    "name": "Connecticut Ave.",
+    "type": "property",
+    "price": 120,
+    "rent": 8,
+    "color": "cyan"
+  },
+  {
+    "name": "Jail",
+    "type": "space",
+    "price": 0,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "St. Charles Place",
+    "type": "property",
+    "price": 140,
+    "rent": 10,
+    "color": "pink"
+  },
+  {
+    "name": "Electric Company",
+    "type": "property",
+    "price": 150,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "States Ave.",
+    "type": "property",
+    "price": 140,
+    "rent": 10,
+    "color": "pink"
+  },
+  {
+    "name": "Virginia Ave.",
+    "type": "property",
+    "price": 160,
+    "rent": 12,
+    "color": "pink"
+  },
+  {
+    "name": "Pennsylvania Railroad",
+    "type": "railroad",
+    "price": 200,
+    "rent": 25,
+    "color": ""
+  },
+  {
+    "name": "St. James Place",
+    "type": "property",
+    "price": 180,
+    "rent": 14,
+    "color": "orange"
+  },
+  {
+    "name": "Community Chest",
+    "type": "card",
+    "price": 0,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "Tennessee Ave.",
+    "type": "property",
+    "price": 180,
+    "rent": 14,
+    "color": "orange"
+  },
+  {
+    "name": "New York Ave.",
+    "type": "property",
+    "price": 200,
+    "rent": 16,
+    "color": "orange"
+  },
+  {
+    "name": "Free Parking",
+    "type": "space",
+    "price": 0,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "Kentucky Ave.",
+    "type": "property",
+    "price": 220,
+    "rent": 18,
+    "color": "red"
+  },
+  {
+    "name": "Chance",
+    "type": "card",
+    "price": 0,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "Indiana Ave.",
+    "type": "property",
+    "price": 220,
+    "rent": 18,
+    "color": "red"
+  },
+  {
+    "name": "Illinois Ave.",
+    "type": "property",
+    "price": 240,
+    "rent": 20,
+    "color": "red"
+  },
+  {
+    "name": "B. & O. Railroad",
+    "type": "railroad",
+    "price": 200,
+    "rent": 25,
+    "color": ""
+  },
+  {
+    "name": "Atlantic Ave.",
+    "type": "property",
+    "price": 260,
+    "rent": 22,
+    "color": "yellow"
+  },
+  {
+    "name": "Ventnor Ave.",
+    "type": "property",
+    "price": 260,
+    "rent": 22,
+    "color": "yellow"
+  },
+  {
+    "name": "Water Works",
+    "type": "property",
+    "price": 150,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "Marvin Gardens",
+    "type": "property",
+    "price": 280,
+    "rent": 24,
+    "color": "yellow"
+  },
+  {
+    "name": "Go to Jail",
+    "type": "space",
+    "price": 0,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "Pacific Ave.",
+    "type": "property",
+    "price": 300,
+    "rent": 26,
+    "color": "green"
+  },
+  {
+    "name": "North Carolina Ave.",
+    "type": "property",
+    "price": 300,
+    "rent": 26,
+    "color": "green"
+  },
+  {
+    "name": "Community Chest",
+    "type": "space",
+    "price": 0,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "Pennsylvania Ave.",
+    "type": "property",
+    "price": 320,
+    "rent": 28,
+    "color": "green"
+  },
+  {
+    "name": "Short Line",
+    "type": "railroad",
+    "price": 200,
+    "rent": 25
+  },
+  {
+    "name": "Chance",
+    "type": "card",
+    "price": 0,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "Park Place",
+    "type": "property",
+    "price": 350,
+    "rent": 35,
+    "color": "blue"
+  },
+  {
+    "name": "Luxury Tax",
+    "type": "tax",
+    "price": 0,
+    "rent": 0,
+    "color": ""
+  },
+  {
+    "name": "Boardwalk",
+    "type": "property",
+    "price": 400,
+    "rent": 50,
+    "color": "blue"
+  }
+]

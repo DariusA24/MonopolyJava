@@ -4,6 +4,7 @@ import gameset.screens.GameScreen;
 import gameutils.Ansi;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 public class Game {
@@ -103,12 +104,12 @@ public class Game {
      * @param board
      */
     private void handlePlayerLanding(int landingSpot, Player player, Board board) {
-        Property property = board.gameBoard.get(landingSpot);
+        Property property = board.getGameBoard().get(landingSpot);
         System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Landed on " + property.displayPropertyName(property));
         System.out.println("---------------");
         String propertyType = property.getType();
         if (propertyType.equals("property")){
-            viewProperty(board.gameBoard.get(landingSpot), player);
+            viewProperty(board.getGameBoard().get(landingSpot), player);
         } else if (propertyType.equals("railroad")) {
             System.out.println("Landed on a railroad");
 
@@ -228,11 +229,11 @@ public class Game {
      * @param playerAmount
      * @throws FileNotFoundException
      */
-    public void gameLoop(int playerAmount) throws FileNotFoundException {
+    public void gameLoop(int playerAmount) throws IOException {
         boolean playGame = true;
         int turnTrack = 0;
         Board board = new Board();
-        board.createBoard();
+        board.listBoard();
         playerList = gameInitializer.setPlayers(playerAmount);
         listPlayers();
         System.out.println(Ansi.ANSI_BLUE + "********** GAME IS STARTING **********" + Ansi.ANSI_RESET);
@@ -256,6 +257,4 @@ public class Game {
             else turnTrack++;
         }
     }
-
-
 }
