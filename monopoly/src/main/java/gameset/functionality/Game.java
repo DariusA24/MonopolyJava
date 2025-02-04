@@ -47,7 +47,7 @@ public class Game {
                 if (player.checkBalance(property.getPrice())) {
                     player.addProperty(property);
                     player.setMoney(player.getMoney() - property.getPrice());
-                    System.out.println("Purchasing: " + property.displayPropertyName(property));
+                    System.out.println("Purchasing: " + property.displayPropertyName());
                     System.out.println("Player balance is: " + Ansi.ANSI_GREEN + player.getMoney() + Ansi.ANSI_RESET);
                 }
                 flag = true;
@@ -74,7 +74,7 @@ public class Game {
             System.out.println("Press E to view details about the property");
             String input = userInput.next();
             if (input.equals("E") || input.equals("e")) {
-                property.displayProperty(property);
+                System.out.println(property);
                 purchaseProperty(property, player);
 
             }
@@ -96,7 +96,7 @@ public class Game {
      */
     private void handlePlayerLanding(int landingSpot, Player player, Board board) {
         Property property = board.getGameBoard().get(landingSpot);
-        System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Landed on " + property.displayPropertyName(property));
+        System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Landed on " + property.displayPropertyName());
         System.out.println("---------------");
         String propertyType = property.getType();
         if (propertyType.equals("property")) {

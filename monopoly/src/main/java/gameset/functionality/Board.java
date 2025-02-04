@@ -1,10 +1,8 @@
 package gameset.functionality;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gameutils.Ansi;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,25 +48,10 @@ public class Board {
         String s = r.lines().reduce("", (prevLines, currLine) -> prevLines + "\n" + currLine);
         r.close();
 
-        ArrayList<Property> list = new ArrayList<>();
-
-        JSONParser parser = new JSONParser();
-        // TODO: discuss with Darius, If parse error, then no property data. Can game continue w/o this?
-        try {
-            JSONArray jsonPropertyList = (JSONArray) parser.parse(s);
-            for (Object o : jsonPropertyList) {
-                JSONObject property = (JSONObject) o;
-                String name = (String) property.get("name");
-                String type = (String) property.get("type");
-                Long price = (Long) property.get("price");
-                Long rent = (Long) property.get("rent");
-                String color = (String) property.get("color");
-                Property parsedProperty = new Property(name, type, Math.toIntExact(price), Math.toIntExact(rent), color);
-                list.add(parsedProperty);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return list;
+        byte[] jsonData = s.getBytes();
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<Property> properties = mapper.readValue(jsonData, new TypeReference<>() {});
+        properties.forEach(property -> property.setOwner(""));
+        return properties;
     }
 }
