@@ -9,17 +9,11 @@ import java.util.*;
 
 public class Game {
     private ArrayList<Player> playerList = new ArrayList<Player>();
-
     private final Dice dice = new Dice();
-
-
     private Scanner userInput = new Scanner(System.in);
-
     private boolean rollAgain = false;
-
     private GameScreen gameScreen = new GameScreen();
     private GameInitializer gameInitializer = new GameInitializer();
-
 
 
     /**
@@ -39,7 +33,6 @@ public class Game {
     }
 
     /**
-     *
      * @param property
      * @param player
      */
@@ -73,7 +66,6 @@ public class Game {
     }
 
     /**
-     *
      * @param property
      * @param player
      */
