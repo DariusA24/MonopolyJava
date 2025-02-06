@@ -5,6 +5,8 @@ module org.example.demo {
 
     exports gameset.functionality to com.fasterxml.jackson.databind;
     opens gameset.functionality to com.fasterxml.jackson.databind;
+    exports gameset.cards to com.fasterxml.jackson.databind;
+    opens gameset.cards to com.fasterxml.jackson.databind;
 
 
     opens screens to javafx.fxml;
