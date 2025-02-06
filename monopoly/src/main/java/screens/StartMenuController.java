@@ -9,12 +9,11 @@ import java.io.IOException;
 public class StartMenuController {
     @FXML
     private void handleStartSubmit() throws IOException {
-       GameApplication gameApplication = new GameApplication();
-       // TODO: causing error for me when running terminal app (gameApplication.playerCreation();)
+        GameApplication gameApplication = new GameApplication();
     }
 
     @FXML
     private void handleExitSubmit() throws IOException {
-       System.exit(0);
+        System.exit(0);
     }
 }

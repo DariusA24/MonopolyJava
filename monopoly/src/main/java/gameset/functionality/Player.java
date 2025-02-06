@@ -1,7 +1,6 @@
 package gameset.functionality;
 
 import gameutils.Ansi;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,7 +96,7 @@ public class Player {
         System.out.println("----------------------");
         System.out.println("Your properties are: ");
         for(Property property : properties){
-            System.out.println(property.displayPropertyName(property));
+            System.out.println(property.displayPropertyName());
             System.out.println(" - Rent: " + property.getRent() + "\n");
         }
         System.out.println("----------------------");
