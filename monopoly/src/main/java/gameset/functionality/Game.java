@@ -104,6 +104,7 @@ public class Game {
             case "property" -> viewProperty(board.getGameBoard().get(landingSpot), player);
             case "railroad" -> System.out.println("Landed on a railroad");
             case "tax" -> System.out.println("Landed on tax");
+            // TODO: GH issue #28 (Chance/Community card display - implement around here)
             case "card" -> System.out.println("Landed on a card");
             default -> System.out.println("Landed on a space");
         }
@@ -185,6 +186,7 @@ public class Game {
         if (player.getJailStatus()) {
             handlePlayerInJail(player);
         } else {
+            // TODO: GH issue #27 (Chance/Community card drawing - implement around here)
             int landingSpot = getLandingSpot(player, board);
             board.updatedBoardLocation(player.getLocation(), landingSpot, player.getName());
             player.updatePosition(landingSpot);
