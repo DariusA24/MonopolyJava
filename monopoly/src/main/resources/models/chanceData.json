@@ -1,89 +1,108 @@
 [
   {
-    "cardText": "Advance to Go. (Collect $200)",
-    "action": "Move",
-    "isSpecial": false,
-    "targetLocation": "Go",
-    "moneyValue": 200
+    "description": "Advance to Go. (Collect $200)",
+    "action": "Advance",
+    "params": {
+      "targetLocation": "Go"
+    }
   },
   {
-    "cardText": "Advance to Illinois Ave. If you pass Go, collect $200.",
-    "action": "Move",
-    "isSpecial": false,
-    "targetLocation": "Illinois Ave"
+    "description": "Advance to Illinois Ave. If you pass Go, collect $200.",
+    "action": "Advance",
+    "params": {
+      "targetLocation": "Illinois Ave"  
+    }
   },
   {
-    "cardText": "Advance to St. Charles Place. If you pass Go, collect $200.",
-    "action": "Move",
-    "isSpecial": false,
-    "targetLocation": "St. Charles Place"
+    "description": "Advance to St. Charles Place. If you pass Go, collect $200.",
+    "action": "Advance",
+    "params": {
+      "targetLocation": "St. Charles Place"
+    }
   },
   {
-    "cardText": "Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total 10 times the amount thrown.",
-    "action": "Move",
-    "isSpecial": false,
-    "targetLocation": "Nearest Utility"
+    "description": "Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total 10 times the amount thrown.",
+    "action": "AdvanceConditional",
+    "params": {
+      "targetLocation": "Nearest Utility",
+      "modifier": 10
+    }
   },
   {
-    "cardText": "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rent to which they are otherwise entitled.",
-    "action": "Move",
-    "isSpecial": false,
-    "targetLocation": "Nearest Railroad"
+    "description": "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rent to which they are otherwise entitled.",
+    "action": "AdvanceConditional",
+    "params": {
+      "targetLocation": "Nearest Railroad",
+      "modifier": 2
+    }
   },
   {
-    "cardText": "Bank pays you dividend of $50.",
-    "action": "Collect",
-    "isSpecial": false,
-    "moneyValue": 50
+    "description": "Bank pays you dividend of $50.",
+    "action": "MoneyReceive",
+    "params": {
+      "value": 50
+    }
   },
   {
-    "cardText": "Get out of Jail Free. This card may be kept until needed, or traded/sold.",
-    "isSpecial": true
+    "description": "Get out of Jail Free. This card may be kept until needed, or traded/sold.",
+    "action": "GetOutOfJailCard",
+    "params": {}
   },
   {
-    "cardText": "Go Back Three Spaces",
-    "action": "Move",
-    "isSpecial": false
+    "description": "Go Back Three Spaces",
+    "action": "DirectMove",
+    "params": {
+      "modifier": -3
+    }
   },
   {
-    "cardText": "Go to Jail. Go directly to Jail. Do not pass GO, do not collect $200.",
-    "action": "Move",
-    "isSpecial": false,
-    "targetLocation": "Jail"
+    "description": "Go to Jail. Go directly to Jail. Do not pass GO, do not collect $200.",
+    "action": "DirectMove",
+    "params": {
+      "targetLocation": "Jail"
+    }
   },
   {
-    "cardText": "Make general repairs on all your property: For each house pay $25, For each hotel pay $100.",
-    "action": "Pay",
-    "isSpecial": false
+    "description": "Make general repairs on all your property: For each house pay $25, For each hotel pay $100.",
+    "action": "OwnedPropertyPay",
+    "params": {
+        "housePay": 25,
+        "hotelPay": 100
+    }
   },
   {
-    "cardText": "Take a trip to Reading Railroad. If you pass Go, collect $200.",
-    "action": "Move",
-    "isSpecial": false,
-    "targetLocation": "Reading Railroad"
+    "description": "Take a trip to Reading Railroad. If you pass Go, collect $200.",
+    "action": "Advance",
+    "params": {
+      "targetLocation": "Reading Railroad"
+    }
   },
   {
-    "cardText": "Pay Poor Tax of $15",
-    "action": "Pay",
-    "isSpecial": false,
-    "moneyValue": 15
+    "description": "Pay Poor Tax of $15",
+    "action": "MoneyPay",
+    "params": {
+      "value": 15
+    }
   },
   {
-    "cardText": "Take a walk on the Boardwalk. Advance token to Boardwalk.",
-    "action": "Move",
-    "isSpecial": false,
-    "targetLocation": "Boardwalk"
+    "description": "Take a walk on the Boardwalk. Advance token to Boardwalk.",
+    "action": "Advance",
+    "params": {
+      "targetLocation": "Boardwalk"
+    }
   },
   {
-    "cardText": "You have been elected Chairman of the Board. Pay each player $50.",
-    "action": "Pay",
-    "isSpecial": false,
-    "moneyValue": 50
+    "description": "You have been elected Chairman of the Board. Pay each player $50.",
+    "action": "MoneyPayAll",
+    "params": {
+      "value": 50
+    }
   },
   {
-    "cardText": "Your building & loan matures. Collect $150.",
-    "action": "Collect",
-    "isSpecial": false,
-    "moneyValue": 150
+    "description": "Your building & loan matures. Collect $150.",
+    "action": "MoneyReceive",
+    "params": {
+      "value": 150
+    }
   }
 ]
