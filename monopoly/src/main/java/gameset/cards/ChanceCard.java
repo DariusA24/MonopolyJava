@@ -10,7 +10,6 @@ import java.util.Map;
  * A Chance card can instruct players to move, pay money, collect money,
  * or perform other actions based on the game rules.
  */
-//@JsonInclude(JsonInclude.Include.USE_DEFAULTS)
 @JsonPropertyOrder({
         "description",
         "action",
