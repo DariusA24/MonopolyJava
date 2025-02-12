@@ -1,20 +1,25 @@
 package gameset.functionality;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import gameset.cards.ChanceCard;
+import gameset.cards.CommunityChestCard;
 import gameutils.Ansi;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import gameutils.ResourceParser;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Board {
-    private ArrayList<Property> gameBoard;
+    private final ArrayList<Property> gameBoard;
+    // TODO: GH issue #26 (Card decks - explore Collections.shuffle method or create Deck class)
+    private ArrayList<ChanceCard> chanceCards;
+    private ArrayList<CommunityChestCard> communityChestCards;
 
     public Board() throws IOException {
-        this.gameBoard = loadPropertyFile();
+        ResourceParser propertyParser = new ResourceParser("/models/propertyData.json");
+        ResourceParser chanceCardParser = new ResourceParser("/models/chanceData.json");
+        ResourceParser communityChestCardParser = new ResourceParser("/models/communityData.json");
+        this.gameBoard = propertyParser.parseJsonToArrayList(Property.class);
+        this.chanceCards = chanceCardParser.parseJsonToArrayList(ChanceCard.class);
+        this.communityChestCards = communityChestCardParser.parseJsonToArrayList(CommunityChestCard.class);
     }
 
     public ArrayList<Property> getGameBoard() {
@@ -39,19 +44,5 @@ public class Board {
                 this.gameBoard.get(newLocation).getName(),
                 playerColoredName
         );
-    }
-
-    private ArrayList<Property> loadPropertyFile() throws IOException {
-        BufferedReader r = new BufferedReader(new InputStreamReader(
-                Objects.requireNonNull(getClass().getResourceAsStream("/models/propertyData.json")))
-        );
-        String s = r.lines().reduce("", (prevLines, currLine) -> prevLines + "\n" + currLine);
-        r.close();
-
-        byte[] jsonData = s.getBytes();
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayList<Property> properties = mapper.readValue(jsonData, new TypeReference<>() {});
-        properties.forEach(property -> property.setOwner(""));
-        return properties;
     }
 }

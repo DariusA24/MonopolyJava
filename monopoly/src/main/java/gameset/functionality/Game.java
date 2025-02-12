@@ -15,6 +15,7 @@ public class Game {
     private GameScreen gameScreen = new GameScreen();
     private GameInitializer gameInitializer = new GameInitializer();
 
+
     /**
      * This method will be used to list the players stats. Having this as a
      * placeholder method to test.
@@ -99,19 +100,13 @@ public class Game {
         System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Landed on " + property.displayPropertyName());
         System.out.println("---------------");
         String propertyType = property.getType();
-        if (propertyType.equals("property")) {
-            viewProperty(board.getGameBoard().get(landingSpot), player);
-        } else if (propertyType.equals("railroad")) {
-            System.out.println("Landed on a railroad");
-
-        } else if (propertyType.equals("tax")) {
-            System.out.println("Landed on tax");
-
-        } else if (propertyType.equals("card")) {
-            System.out.println("Landed on a card");
-
-        } else {
-            System.out.println("Landed on a space");
+        switch (propertyType) {
+            case "property" -> viewProperty(board.getGameBoard().get(landingSpot), player);
+            case "railroad" -> System.out.println("Landed on a railroad");
+            case "tax" -> System.out.println("Landed on tax");
+            // TODO: GH issue #28 (Chance/Community card display - implement around here)
+            case "card" -> System.out.println("Landed on a card");
+            default -> System.out.println("Landed on a space");
         }
         System.out.println("---------------");
     }
@@ -191,6 +186,7 @@ public class Game {
         if (player.getJailStatus()) {
             handlePlayerInJail(player);
         } else {
+            // TODO: GH issue #27 (Chance/Community card drawing - implement around here)
             int landingSpot = getLandingSpot(player, board);
             board.updatedBoardLocation(player.getLocation(), landingSpot, player.getName());
             player.updatePosition(landingSpot);

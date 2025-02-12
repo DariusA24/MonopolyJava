@@ -24,8 +24,7 @@ public class Property {
     private Integer rent;
     @JsonProperty("color")
     private String color;
-
-    private String owner;
+    private String owner = "";
 
     //TODO: Add hotels
     //private Map<String, Integer> hotelList = new HashMap<String, Integer>();
