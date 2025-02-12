@@ -9,17 +9,16 @@ import java.util.ArrayList;
 
 public class Board {
     private final ArrayList<Property> gameBoard;
-    // TODO: GH issue #26 (Card decks - explore Collections.shuffle method or create Deck class)
-    private ArrayList<ChanceCard> chanceCards;
-    private ArrayList<CommunityChestCard> communityChestCards;
+    private Deck<ChanceCard> chanceCards;
+    private Deck<CommunityChestCard> communityChestCards;
 
     public Board() throws IOException {
         ResourceParser propertyParser = new ResourceParser("/models/propertyData.json");
         ResourceParser chanceCardParser = new ResourceParser("/models/chanceData.json");
         ResourceParser communityChestCardParser = new ResourceParser("/models/communityData.json");
         this.gameBoard = propertyParser.parseJsonToArrayList(Property.class);
-        this.chanceCards = chanceCardParser.parseJsonToArrayList(ChanceCard.class);
-        this.communityChestCards = communityChestCardParser.parseJsonToArrayList(CommunityChestCard.class);
+        this.chanceCards = new Deck<>(chanceCardParser.parseJsonToArrayList(ChanceCard.class));
+        this.communityChestCards = new Deck<>(communityChestCardParser.parseJsonToArrayList(CommunityChestCard.class));
     }
 
     public ArrayList<Property> getGameBoard() {
