@@ -5,9 +5,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Class representing a deck of cards.
+ *
+ * Includes methods for shuffling, drawing, and adding cards to top or bottom of the deck.
+ */
 public class Deck<T extends Card> {
     ArrayList<T> deck;
 
+    /**
+     * Creates a new deck of cards.
+     *
+     * @param cards the cards to add to the deck
+     */
     public Deck(List<T> cards) {
         this.deck = (ArrayList<T>) cards;
     }
