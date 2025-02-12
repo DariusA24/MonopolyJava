@@ -122,7 +122,7 @@ public class Game {
         while (jailChoiceFlag)
             if (choice.equals("1")) {
                 dice.rollDice(player);
-                if (dice.doubles) {
+                if (dice.isDoubles()) {
                     player.displayColoredName();
                     System.out.println("Rolled doubles and escaped jail!");
                 } else {
@@ -153,7 +153,7 @@ public class Game {
      */
     private int getLandingSpot(Player player, Board board) {
         int roll = dice.rollDice(player);
-        rollAgain = dice.doubles;
+        rollAgain = dice.isDoubles();
         int landingSpot = player.getLocation() + roll;
         if (handleDoubleRoll(player)) {
             System.out.println("Rolled doubles three times - go to jail: ");

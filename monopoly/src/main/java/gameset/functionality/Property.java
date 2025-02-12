@@ -3,14 +3,16 @@ import gameutils.Ansi;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "name",
         "type",
         "price",
-        "rent",
-        "color"
+        "rentWithBuildingsList",
+        "color",
+        "mortgage"
 })
 public class Property {
 
@@ -20,15 +22,23 @@ public class Property {
     private String type;
     @JsonProperty("price")
     private Integer price;
-    @JsonProperty("rent")
-    private Integer rent;
+    @JsonProperty("rentWithBuildingsList")
+    private final ArrayList<Integer> rentWithBuildingsList = new ArrayList<>();
     @JsonProperty("color")
     private String color;
+    @JsonProperty("mortgage")
+    private Integer mortgage;
+
+    private Integer numHouses = 0;
+    private boolean hasHotel;
+    private Integer rent;
+
+
+    // Constants
+    private static final int MAX_HOUSES = 4;
     private String owner = "";
 
-    //TODO: Add hotels
-    //private Map<String, Integer> hotelList = new HashMap<String, Integer>();
-
+    //Getter
     @JsonProperty("name")
     public String getName() {
         return name;
@@ -44,23 +54,38 @@ public class Property {
         return price;
     }
 
-    @JsonProperty("rent")
-    public Integer getRent() {
-        return rent;
-    }
-
     @JsonProperty("color")
     public String getColor() {
         return color;
+    }
+
+    @JsonProperty("mortgage")
+    public Integer getMortgage() {
+        return mortgage;
+    }
+
+    @JsonProperty("rentWithBuildingsList")
+    public ArrayList<Integer> getRentWithBuildingsList() {
+        return rentWithBuildingsList;
+    }
+
+    public Integer getNumHouses() {
+        return numHouses;
+    }
+
+    public Integer getRent() {
+        return rentWithBuildingsList.get(numHouses);
     }
 
     public String getOwner() {
         return owner;
     }
 
+    //Setters
     public void setOwner(String owner) {
         this.owner = owner;
     }
+    public void setRent(Integer rent) {this.rent = rentWithBuildingsList.get(numHouses);}
 
     @Override
     public String toString() {
@@ -70,15 +95,50 @@ public class Property {
                 System.lineSeparator() +
                 "Price: " + this.price +
                 System.lineSeparator() +
-                "Rent: " + this.rent +
+                "Rent: " + getRent() +
                 System.lineSeparator() +
                 "Owned: " + this.owner +
                 System.lineSeparator() +
                 "----------------";
     }
 
+    /**
+     * Displays the property with the correct property color.
+     */
     public String displayPropertyName(){
         Ansi ansi = new Ansi();
         return (ansi.propertyToAnsiColor(this.color) + this.name + Ansi.ANSI_RESET);
+    }
+
+    /**
+     * Changes the rent based on the number of houses the property has.
+     */
+    private void changeRent() {
+        rent = rentWithBuildingsList.get(numHouses);
+    }
+
+    public void buildBuilding() {
+        if (hasHotel) {
+            System.out.println("Unable to purchase anymore buildings on this property.");
+        }
+        else if (numHouses == MAX_HOUSES) {
+            addHotel();
+        }
+        else {
+            addHouse();
+        }
+    }
+
+    private void addHouse() {
+            numHouses++;
+            changeRent();
+            System.out.println("Purchased a house for: " + displayPropertyName());
+    }
+
+    private void addHotel() {
+        hasHotel = true;
+        numHouses++;
+        changeRent();
+        System.out.println("Purchased a hotel for: " + displayPropertyName());
     }
 }
