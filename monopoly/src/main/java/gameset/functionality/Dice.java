@@ -9,6 +9,9 @@ import java.util.Scanner;
 public class Dice {
 
     private boolean doubles = false;
+    private int dice1;
+    private int dice2;
+    private int rollTotal;
 
     public boolean isDoubles() {
         return doubles;
@@ -17,28 +20,27 @@ public class Dice {
     /**
      * Gets random values for the dice, calculates the total and checks for doubles.
      */
-    private int getDiceValues(){
+    private void getDiceValues(){
         Random rand = new Random();
-        int dice1 = rand.nextInt(6) + 1;
-        int dice2 = rand.nextInt(6) + 1;
-        int rollTotal = dice1 + dice2;
+        this.dice1 = rand.nextInt(6) + 1;
+        this.dice2 = rand.nextInt(6) + 1;
+        this.rollTotal = dice1 + dice2;
         this.doubles = dice1 == dice2;
-        printDiceResults(dice1, dice2, rollTotal);
-        return rollTotal;
     }
+
     /**
      * Prints the result of the roll.
-     *
-     * @param dice1 result of the first dice
-     * @param dice2 result of the second dice
-     * @param rollTotal total of the first and second dice added together
      */
-    private void printDiceResults(int dice1, int dice2, int rollTotal) {
-        System.out.println("************");
-        System.out.println("Dice 1 is: " + dice1);
-        System.out.println("Dice 2 is: " + dice2);
-        System.out.println("Roll is: " + rollTotal);
-        System.out.println("************");
+    @Override
+    public String toString() {
+        return "----------------" +
+                System.lineSeparator() +
+                "Dice 1 is: " + this.dice1 +
+                System.lineSeparator() +
+                "Dice 2 is: " + this.dice2 +
+                System.lineSeparator() +
+                "Roll is: " + this.rollTotal +
+                "----------------";
     }
 
     /**
@@ -52,6 +54,7 @@ public class Dice {
                 Ansi.ANSI_RESET + Ansi.ANSI_YELLOW + "\nPress R to roll. " + Ansi.ANSI_RESET);
 
         rollInputVerifier(rollButton);  // Wait for valid input
+        getDiceValues();
     }
 
     /**
@@ -72,6 +75,8 @@ public class Dice {
      */
     public int rollDice(Player player) {
         playerRollPrompt(player, new Scanner(System.in));
-        return getDiceValues();
+        String output = toString();
+        System.out.println(output);
+        return this.rollTotal;
     }
 }
