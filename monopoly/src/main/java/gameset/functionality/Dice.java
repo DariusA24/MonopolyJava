@@ -8,38 +8,75 @@ import java.util.Scanner;
 
 public class Dice {
 
-    public boolean doubles = false;
-    private int getDiceValues(){
-        Random rand = new Random();
-        int dice1 = rand.nextInt(6) + 1;
-        int dice2 = rand.nextInt(6) + 1;
-        int rollTotal = dice1 + dice2;
+    private boolean doubles = false;
+    private int dice1;
+    private int dice2;
+    private int rollTotal;
 
-        if(dice1 == dice2){
-            this.doubles = true;
-        }
-        else {
-            this.doubles = false;
-        }
-
-        System.out.println("************");
-        System.out.println("Dice 1 is: " + dice1);
-        System.out.println("Dice 2 is: " + dice2);
-        System.out.println("Roll is: " + rollTotal);
-        System.out.println("************");
-        return rollTotal;
+    public boolean isDoubles() {
+        return doubles;
     }
 
-    public int rollDice(Player player){
-        Scanner rollButton = new Scanner(System.in);
+    /**
+     * Gets random values for the dice, calculates the total and checks for doubles.
+     */
+    private void getDiceValues(){
+        Random rand = new Random();
+        this.dice1 = rand.nextInt(6) + 1;
+        this.dice2 = rand.nextInt(6) + 1;
+        this.rollTotal = dice1 + dice2;
+        this.doubles = dice1 == dice2;
+    }
+
+    /**
+     * Prints the result of the roll.
+     */
+    @Override
+    public String toString() {
+        return "----------------" +
+                System.lineSeparator() +
+                "Dice 1 is: " + this.dice1 +
+                System.lineSeparator() +
+                "Dice 2 is: " + this.dice2 +
+                System.lineSeparator() +
+                "Roll is: " + this.rollTotal +
+                "----------------";
+    }
+
+    /**
+     * Prompts the user to roll.
+     *
+     * @param player player object
+     * @param rollButton Scanner for the roll button
+     */
+    private void playerRollPrompt(Player player, Scanner rollButton) {
         System.out.println("Player: " + player.getColor() + player.getName() +
                 Ansi.ANSI_RESET + Ansi.ANSI_YELLOW + "\nPress R to roll. " + Ansi.ANSI_RESET);
 
+        rollInputVerifier(rollButton);  // Wait for valid input
+        getDiceValues();
+    }
+
+    /**
+     * Checks the input and retries until the user presses R.
+     *
+     * @param rollButton scanner for the roll button
+     */
+    private void  rollInputVerifier(Scanner rollButton) {
         String rollInput = rollButton.next();
-        while(!rollInput.equals("R") && !rollInput.equals("r")){
+        while (!rollInput.equalsIgnoreCase("R")) {
             System.out.println("Please press 'R' to roll");
             rollInput = rollButton.next();
         }
-        return getDiceValues();
+    }
+
+    /**
+     * Call to roll the dice.
+     */
+    public int rollDice(Player player) {
+        playerRollPrompt(player, new Scanner(System.in));
+        String output = toString();
+        System.out.println(output);
+        return this.rollTotal;
     }
 }

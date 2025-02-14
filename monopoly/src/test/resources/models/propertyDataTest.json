@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Park Place",
+    "type": "Property",
+    "price": 350,
+    "color": "blue",
+    "mortgage": 175,
+    "rentWithBuildingsList": [35, 175, 500, 1100, 1300, 1500]
+  }
+]

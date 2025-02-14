@@ -2,6 +2,7 @@ module org.example.demo {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.annotation;
 
     exports gameset.functionality to com.fasterxml.jackson.databind;
     opens gameset.functionality to com.fasterxml.jackson.databind;
