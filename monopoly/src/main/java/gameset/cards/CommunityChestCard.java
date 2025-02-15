@@ -22,6 +22,17 @@ public class CommunityChestCard extends Card {
         super(action, description, params);
     }
 
+    @Override
+    public String toString() {
+        return "----------------" +
+                System.lineSeparator() +
+                "Community Chest Card" +
+                System.lineSeparator() +
+                this.description +
+                System.lineSeparator() +
+                "----------------";
+    }
+
     // TODO: GH issues #29, #30, #31 (Implement community chest card effects)
     @Override
     public void applyEffect(Player p, Game g) {

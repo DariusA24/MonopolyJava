@@ -1,5 +1,6 @@
 package gameset.functionality;
 
+import gameset.cards.Card;
 import gameset.screens.GameScreen;
 import gameutils.Ansi;
 
@@ -96,7 +97,7 @@ public class Game {
      * @param board
      */
     private void handlePlayerLanding(int landingSpot, Player player, Board board) {
-        Property property = board.getGameBoard().get(landingSpot);
+        Property property = board.getProperty(landingSpot);
         System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Landed on " + property.displayPropertyName());
         System.out.println("---------------");
         String propertyType = property.getType();
@@ -104,8 +105,16 @@ public class Game {
             case "property" -> viewProperty(board.getGameBoard().get(landingSpot), player);
             case "railroad" -> System.out.println("Landed on a railroad");
             case "tax" -> System.out.println("Landed on tax");
-            // TODO: GH issue #28 (Chance/Community card display - implement around here)
-            case "card" -> System.out.println("Landed on a card");
+            case "card" -> {
+                Card c;
+                if (property.getName().equals("Chance")) {
+                    c = board.getChanceCards().draw();
+                } else {
+                    c = board.getCommunityChestCards().draw();
+                }
+                System.out.println(c);
+                c.applyEffect(player, this);
+            }
             default -> System.out.println("Landed on a space");
         }
         System.out.println("---------------");
@@ -186,7 +195,6 @@ public class Game {
         if (player.getJailStatus()) {
             handlePlayerInJail(player);
         } else {
-            // TODO: GH issue #27 (Chance/Community card drawing - implement around here)
             int landingSpot = getLandingSpot(player, board);
             board.updatedBoardLocation(player.getLocation(), landingSpot, player.getName());
             player.updatePosition(landingSpot);
@@ -214,7 +222,9 @@ public class Game {
         boolean playGame = true;
         int turnTrack = 0;
         Board board = new Board();
-        board.listBoard();
+        // TODO: experiment board
+//        board.listBoard();
+        System.out.println(board);
         playerList = gameInitializer.setPlayers(playerAmount);
         listPlayers();
         System.out.println(Ansi.ANSI_BLUE + "********** GAME IS STARTING **********" + Ansi.ANSI_RESET);

@@ -110,6 +110,14 @@ public class Property {
         return (ansi.propertyToAnsiColor(this.color) + this.name + Ansi.ANSI_RESET);
     }
 
+    public String displayPropertyName(int maxLength) {
+        Ansi ansi = new Ansi();
+        if (this.name.length() > maxLength) {
+            return (ansi.propertyToAnsiColor(this.color) + this.name.substring(0, maxLength) + Ansi.ANSI_RESET);
+        }
+        return (ansi.propertyToAnsiColor(this.color) + Board.centerString(this.name, maxLength) + Ansi.ANSI_RESET);
+    }
+
     /**
      * Changes the rent based on the number of houses the property has.
      */

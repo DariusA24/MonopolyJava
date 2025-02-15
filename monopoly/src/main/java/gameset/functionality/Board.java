@@ -44,4 +44,119 @@ public class Board {
                 playerColoredName
         );
     }
+
+    public Property getProperty(int location) {
+        return this.gameBoard.get(location);
+    }
+
+    public Deck<ChanceCard> getChanceCards() {
+        return chanceCards;
+    }
+
+    public Deck<CommunityChestCard> getCommunityChestCards() {
+        return communityChestCards;
+    }
+
+    @Override
+    public String toString() {
+        int size = 220;
+        int maxLen = size/11 - 1;
+        char corner = '+';
+        String dash = "-";
+        char edge = '|';
+        StringBuilder boardString = new StringBuilder();
+
+        boardString.append(makeBorder(size, corner, dash));
+
+        int row = 0;
+        while (row <= 10){
+            int propertyStartIdx = 20 - row;
+            if (propertyStartIdx == 20) {
+                for (int i = 0; i <= 10; i++) {
+                    if (i == 10) {
+                        boardString.append(surroundWithEdge(getProperty(propertyStartIdx + i).displayPropertyName(maxLen + 1), edge, false));
+                    } else {
+                        boardString.append(surroundWithEdge(getProperty(propertyStartIdx + i).displayPropertyName(maxLen), edge, true));
+                    }
+                }
+                boardString.append(System.lineSeparator());
+                // TODO: add players here, comma separated if multiple
+                for (int i = 0; i <= 10; i++) {
+                    if (i == 10) {
+                        boardString.append(surroundWithEdge(centerString(" ", maxLen+1), edge, false));
+                    } else {
+                        boardString.append(surroundWithEdge(centerString(" ", maxLen), edge, true));
+                    }
+                }
+                boardString.append(System.lineSeparator());
+            } else if (propertyStartIdx == 10) {
+                // Go to 0
+                for (int i = 0; i <= 10; i++) {
+                    if (i == 10) {
+                        boardString.append(surroundWithEdge(getProperty(0).displayPropertyName(maxLen + 1), edge, false));
+                    } else {
+                        boardString.append(surroundWithEdge(getProperty(propertyStartIdx - i).displayPropertyName(maxLen), edge, true));
+                    }
+                }
+                boardString.append(System.lineSeparator());
+                // TODO: add players here, comma separated if multiple
+                for (int i = 0; i <= 10; i++) {
+                    if (i == 10) {
+                        boardString.append(surroundWithEdge(centerString(" ", maxLen+1), edge, false));
+                    } else {
+                        boardString.append(surroundWithEdge(centerString(" ", maxLen), edge, true));
+                    }
+                }
+                boardString.append(System.lineSeparator());
+            } else {
+                // TODO: fix bug off by 3 spaces??
+                boardString.append(surroundWithEdge(getProperty(propertyStartIdx).displayPropertyName(maxLen), edge, false));
+                boardString.append(" ".repeat(size - (maxLen+1) * 2 - 1));
+                boardString.append(surroundWithEdge(getProperty(propertyStartIdx + (row + 5) * 2).displayPropertyName(maxLen+1), edge, false));
+                boardString.append(System.lineSeparator());
+                // TODO: add players here, comma separated if multiple
+                boardString.append(surroundWithEdge(centerString(" ", maxLen), edge, false));
+                boardString.append(" ".repeat(size - (maxLen+1) * 2 - 1));
+                boardString.append(surroundWithEdge(centerString(" ", maxLen+1), edge, false));
+                boardString.append(System.lineSeparator());
+            }
+            row++;
+        }
+        // Board
+        // L0: 20 - 30 (free parking - go to jail)
+        // L1: 19 & 31 + 12
+        // L2: 18 & 32 + 14
+        // L3: 17 & 33 + 16
+        // L4: 16 & 34
+        // L5: 15 & 35
+        // L6: 14 & 36
+        // L7: 13 & 37
+        // L8: 12 & 38
+        // L9: 11 & 39 (st charles & Boardwalk)
+        // L10: 10 - 0 (GO -> JAIL)
+
+        boardString.append(makeBorder(size, corner, dash));
+        return boardString.toString();
+    }
+
+    private String makeBorder(int size, char corner, String dash) {
+        return corner +
+                dash.repeat(size) +
+                corner +
+                System.lineSeparator();
+    }
+
+    private String surroundWithEdge(String str, char edge, boolean skipRight) {
+        if (skipRight) {
+            return edge + str;
+        }
+        return edge + str + edge;
+    }
+
+    static String centerString(String str, int maxSize) {
+        int spacer = maxSize - str.length();
+        int leading = spacer / 2;
+        int trailing = spacer - leading;
+        return " ".repeat(leading) + str + " ".repeat(trailing);
+    }
 }

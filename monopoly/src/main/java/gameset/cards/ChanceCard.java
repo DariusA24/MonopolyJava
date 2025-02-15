@@ -22,6 +22,17 @@ public class ChanceCard extends Card {
         super(action, description, params);
     }
 
+    @Override
+    public String toString() {
+        return "----------------" +
+                System.lineSeparator() +
+                "Chance Card" +
+                System.lineSeparator() +
+                this.description +
+                System.lineSeparator() +
+                "----------------";
+    }
+
     // TODO: GH issues #29, #30, #31 (Implement chance card effects)
     @Override
     public void applyEffect(Player p, Game g) {
