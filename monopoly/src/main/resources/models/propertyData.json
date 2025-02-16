@@ -267,6 +267,8 @@
   {
     "name": "Short Line",
     "type": "railroad",
+    "price": 200,
+    "color": "",
     "rentWithBuildingsList": [0]
   },
   {

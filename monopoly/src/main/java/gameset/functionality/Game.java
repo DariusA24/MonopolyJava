@@ -96,7 +96,7 @@ public class Game {
      * @param board
      */
     private void handlePlayerLanding(int landingSpot, Player player, Board board) {
-        Property property = board.getGameBoard().get(landingSpot);
+        Property property = board.getProperty(landingSpot);
         System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Landed on " + property.displayPropertyName());
         System.out.println("---------------");
         String propertyType = property.getType();
@@ -188,8 +188,9 @@ public class Game {
         } else {
             // TODO: GH issue #27 (Chance/Community card drawing - implement around here)
             int landingSpot = getLandingSpot(player, board);
-            board.updatedBoardLocation(player.getLocation(), landingSpot, player.getName());
             player.updatePosition(landingSpot);
+            board.setPlayerPosition(player);
+            System.out.println(board);
             handlePlayerLanding(landingSpot, player, board);
         }
         String choice = gameScreen.turnMenu();
@@ -213,10 +214,10 @@ public class Game {
     public void gameLoop(int playerAmount) throws IOException {
         boolean playGame = true;
         int turnTrack = 0;
-        Board board = new Board();
-        board.listBoard();
         playerList = gameInitializer.setPlayers(playerAmount);
         listPlayers();
+        Board board = new Board(playerList);
+        System.out.println(board);
         System.out.println(Ansi.ANSI_BLUE + "********** GAME IS STARTING **********" + Ansi.ANSI_RESET);
 
         //Main game loop
