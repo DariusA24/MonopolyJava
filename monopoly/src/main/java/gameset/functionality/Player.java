@@ -1,6 +1,7 @@
 package gameset.functionality;
 
 import gameutils.Ansi;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +19,9 @@ public class Player {
 
     private int doubleRollCounter;
     public int railRoadCounter;
-    
 
-    public Player(String name, int money, String color){
+
+    public Player(String name, int money, String color) {
         this.name = name;
         this.playerMoney = money;
         this.color = color;
@@ -28,7 +29,7 @@ public class Player {
         this.inJail = false;
     }
 
-    public String getName(){
+    public String getName() {
         return (this.color + this.name + Ansi.ANSI_RESET);
     }
 
@@ -36,55 +37,64 @@ public class Player {
         System.out.println(getName());
     }
 
-    public int getMoney(){
+    public int getMoney() {
         return playerMoney;
     }
 
-    public String getColor() {return color; }
+    public String getColor() {
+        return color;
+    }
 
-    public int getLocation() {return location; }
+    public int getLocation() {
+        return location;
+    }
 
-    public boolean getJailStatus() { return inJail; }
+    public boolean getJailStatus() {
+        return inJail;
+    }
 
-    public int getDoubleRollCounter() {return doubleRollCounter; }
+    public int getDoubleRollCounter() {
+        return doubleRollCounter;
+    }
 
-    public List<Property> getProperties(){
+    public List<Property> getProperties() {
         return properties;
     }
 
-    public void setMoney(int newMoney){
+    public void setMoney(int newMoney) {
         this.playerMoney = newMoney;
     }
 
-    public void setDoubleRollCounter(boolean rolledDouble){
-        if(rolledDouble){
+    public void setDoubleRollCounter(boolean rolledDouble) {
+        if (rolledDouble) {
             this.doubleRollCounter++;
-        }
-        else {
+        } else {
             this.doubleRollCounter = 0;
         }
     }
 
-    public void addProperty(Property property){
+    public void addProperty(Property property) {
         this.properties.add(property);
     }
 
-    public void addMoney(int money){
+    public void addMoney(int money) {
         this.playerMoney += money;
     }
 
-    public void goToJail(){
+    public void goToJail() {
         this.inJail = true;
     }
 
-    public void leaveJail() {this.inJail = false; }
-    
-    public void updatePosition(int newPosition){
+    public void leaveJail() {
+        this.inJail = false;
+    }
+
+    public void updatePosition(int newPosition) {
         this.location = newPosition;
     }
 
-    public boolean checkBalance(int cost){
-        if(playerMoney - cost < 0){
+    public boolean checkBalance(int cost) {
+        if (playerMoney - cost < 0) {
             System.out.println("Not enough money");
             System.out.println("This cost: " + cost + " your balance is: " + playerMoney);
             return false;
@@ -92,10 +102,10 @@ public class Player {
         return true;
     }
 
-    public void displayPropertes(){
+    public void displayPropertes() {
         System.out.println("----------------------");
         System.out.println("Your properties are: ");
-        for(Property property : properties){
+        for (Property property : properties) {
             System.out.println(property.displayPropertyName());
             System.out.println(" - Rent: " + property.getRent() + "\n");
         }
@@ -114,9 +124,7 @@ public class Player {
         railRoadCounter -= 1;
     }
 
-
-
-
-
-
+    public String getNameNoColor() {
+        return name;
+    }
 }

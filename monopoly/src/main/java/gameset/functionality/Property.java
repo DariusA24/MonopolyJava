@@ -1,8 +1,10 @@
 package gameset.functionality;
+
 import gameutils.Ansi;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import java.util.ArrayList;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -85,7 +87,10 @@ public class Property {
     public void setOwner(String owner) {
         this.owner = owner;
     }
-    public void setRent(Integer rent) {this.rent = rentWithBuildingsList.get(numHouses);}
+
+    public void setRent(Integer rent) {
+        this.rent = rentWithBuildingsList.get(numHouses);
+    }
 
     @Override
     public String toString() {
@@ -105,9 +110,17 @@ public class Property {
     /**
      * Displays the property with the correct property color.
      */
-    public String displayPropertyName(){
+    public String displayPropertyName() {
         Ansi ansi = new Ansi();
         return (ansi.propertyToAnsiColor(this.color) + this.name + Ansi.ANSI_RESET);
+    }
+
+    public String displayPropertyName(int maxLength) {
+        Ansi ansi = new Ansi();
+        if (this.name.length() > maxLength) {
+            return (ansi.propertyToAnsiColor(this.color) + this.name.substring(0, maxLength) + Ansi.ANSI_RESET);
+        }
+        return (ansi.propertyToAnsiColor(this.color) + Board.centerString(this.name, maxLength) + Ansi.ANSI_RESET);
     }
 
     /**
@@ -120,19 +133,17 @@ public class Property {
     public void buildBuilding() {
         if (hasHotel) {
             System.out.println("Unable to purchase anymore buildings on this property.");
-        }
-        else if (numHouses == MAX_HOUSES) {
+        } else if (numHouses == MAX_HOUSES) {
             addHotel();
-        }
-        else {
+        } else {
             addHouse();
         }
     }
 
     private void addHouse() {
-            numHouses++;
-            changeRent();
-            System.out.println("Purchased a house for: " + displayPropertyName());
+        numHouses++;
+        changeRent();
+        System.out.println("Purchased a house for: " + displayPropertyName());
     }
 
     private void addHotel() {
