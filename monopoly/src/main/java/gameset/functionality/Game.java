@@ -196,8 +196,9 @@ public class Game {
             handlePlayerInJail(player);
         } else {
             int landingSpot = getLandingSpot(player, board);
-            board.updatedBoardLocation(player.getLocation(), landingSpot, player.getName());
             player.updatePosition(landingSpot);
+            board.setPlayerPosition(player);
+            System.out.println(board);
             handlePlayerLanding(landingSpot, player, board);
         }
         String choice = gameScreen.turnMenu();
@@ -221,12 +222,10 @@ public class Game {
     public void gameLoop(int playerAmount) throws IOException {
         boolean playGame = true;
         int turnTrack = 0;
-        Board board = new Board();
-        // TODO: experiment board
-//        board.listBoard();
-        System.out.println(board);
         playerList = gameInitializer.setPlayers(playerAmount);
         listPlayers();
+        Board board = new Board(playerList);
+        System.out.println(board);
         System.out.println(Ansi.ANSI_BLUE + "********** GAME IS STARTING **********" + Ansi.ANSI_RESET);
 
         //Main game loop

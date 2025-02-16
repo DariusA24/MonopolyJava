@@ -4,29 +4,29 @@ import gameset.cards.ChanceCard;
 import gameset.cards.CommunityChestCard;
 import gameutils.Ansi;
 import gameutils.ResourceParser;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Board {
+    private final HashMap<String, Integer> playerPositions = new HashMap<>();
     private final ArrayList<Property> gameBoard;
-    private Deck<ChanceCard> chanceCards;
-    private Deck<CommunityChestCard> communityChestCards;
+    private final Deck<ChanceCard> chanceCards;
+    private final Deck<CommunityChestCard> communityChestCards;
 
-    public Board() throws IOException {
+    public Board(ArrayList<Player> players) throws IOException {
         ResourceParser propertyParser = new ResourceParser("/models/propertyData.json");
         ResourceParser chanceCardParser = new ResourceParser("/models/chanceData.json");
         ResourceParser communityChestCardParser = new ResourceParser("/models/communityData.json");
         this.gameBoard = propertyParser.parseJsonToArrayList(Property.class);
         this.chanceCards = new Deck<>(chanceCardParser.parseJsonToArrayList(ChanceCard.class));
         this.communityChestCards = new Deck<>(communityChestCardParser.parseJsonToArrayList(CommunityChestCard.class));
+        players.forEach(p -> playerPositions.put(p.getNameNoColor(), 0));
     }
 
     public ArrayList<Property> getGameBoard() {
         return gameBoard;
-    }
-
-    public void listBoard() {
-        new gameset.screens.Board().printBoard();
     }
 
     public void passedGo(Player player) {
@@ -34,15 +34,6 @@ public class Board {
         System.out.println("Player: ");
         player.displayColoredName();
         System.out.println(" Passed Go, Collect: " + Ansi.ANSI_GREEN + " $200 " + Ansi.ANSI_RESET);
-    }
-
-    public void updatedBoardLocation(int previousLocation, int newLocation, String playerColoredName) {
-        gameset.screens.Board boardScreen = new gameset.screens.Board();
-        boardScreen.updatePlayerPositionOnBoard(
-                this.gameBoard.get(previousLocation).getName(),
-                this.gameBoard.get(newLocation).getName(),
-                playerColoredName
-        );
     }
 
     public Property getProperty(int location) {
@@ -60,7 +51,7 @@ public class Board {
     @Override
     public String toString() {
         int size = 220;
-        int maxLen = size/11 - 1;
+        int maxLen = size / 11 - 1;
         char corner = '+';
         String dash = "-";
         char edge = '|';
@@ -69,72 +60,126 @@ public class Board {
         boardString.append(makeBorder(size, corner, dash));
 
         int row = 0;
-        while (row <= 10){
+        while (row <= 10) {
             int propertyStartIdx = 20 - row;
             if (propertyStartIdx == 20) {
                 for (int i = 0; i <= 10; i++) {
                     if (i == 10) {
-                        boardString.append(surroundWithEdge(getProperty(propertyStartIdx + i).displayPropertyName(maxLen + 1), edge, false));
+                        boardString.append(
+                                surroundWithEdge(
+                                        getProperty(propertyStartIdx + i).displayPropertyName(maxLen + 1),
+                                        edge,
+                                        false
+                                )
+                        );
                     } else {
-                        boardString.append(surroundWithEdge(getProperty(propertyStartIdx + i).displayPropertyName(maxLen), edge, true));
+                        boardString.append(
+                                surroundWithEdge(
+                                        getProperty(propertyStartIdx + i).displayPropertyName(maxLen),
+                                        edge,
+                                        true
+                                )
+                        );
                     }
                 }
                 boardString.append(System.lineSeparator());
-                // TODO: add players here, comma separated if multiple
+
+                // Add players
                 for (int i = 0; i <= 10; i++) {
                     if (i == 10) {
-                        boardString.append(surroundWithEdge(centerString(" ", maxLen+1), edge, false));
+                        boardString.append(
+                                surroundWithEdge(
+                                        centerString(
+                                                printPlayersOnProperty(propertyStartIdx + i, maxLen),
+                                                maxLen + 1
+                                        ),
+                                        edge,
+                                        false
+                                )
+                        );
                     } else {
-                        boardString.append(surroundWithEdge(centerString(" ", maxLen), edge, true));
+                        boardString.append(
+                                surroundWithEdge(
+                                        centerString(
+                                                printPlayersOnProperty(propertyStartIdx + i, maxLen),
+                                                maxLen
+                                        ),
+                                        edge,
+                                        true
+                                )
+                        );
                     }
                 }
                 boardString.append(System.lineSeparator());
             } else if (propertyStartIdx == 10) {
-                // Go to 0
                 for (int i = 0; i <= 10; i++) {
                     if (i == 10) {
-                        boardString.append(surroundWithEdge(getProperty(0).displayPropertyName(maxLen + 1), edge, false));
+                        boardString.append(
+                                surroundWithEdge(
+                                        getProperty(0).displayPropertyName(maxLen + 1),
+                                        edge,
+                                        false
+                                )
+                        );
                     } else {
-                        boardString.append(surroundWithEdge(getProperty(propertyStartIdx - i).displayPropertyName(maxLen), edge, true));
+                        boardString.append(
+                                surroundWithEdge(
+                                        getProperty(propertyStartIdx - i).displayPropertyName(maxLen),
+                                        edge,
+                                        true
+                                )
+                        );
                     }
                 }
                 boardString.append(System.lineSeparator());
-                // TODO: add players here, comma separated if multiple
+
+                // Add players
                 for (int i = 0; i <= 10; i++) {
                     if (i == 10) {
-                        boardString.append(surroundWithEdge(centerString(" ", maxLen+1), edge, false));
+                        boardString.append(
+                                surroundWithEdge(
+                                        centerString(printPlayersOnProperty(0, maxLen), maxLen + 1),
+                                        edge,
+                                        false
+                                )
+                        );
                     } else {
-                        boardString.append(surroundWithEdge(centerString(" ", maxLen), edge, true));
+                        boardString.append(
+                                surroundWithEdge(
+                                        centerString(printPlayersOnProperty(propertyStartIdx - i, maxLen), maxLen),
+                                        edge,
+                                        true
+                                )
+                        );
                     }
                 }
                 boardString.append(System.lineSeparator());
             } else {
-                // TODO: fix bug off by 3 spaces??
                 boardString.append(surroundWithEdge(getProperty(propertyStartIdx).displayPropertyName(maxLen), edge, false));
-                boardString.append(" ".repeat(size - (maxLen+1) * 2 - 1));
-                boardString.append(surroundWithEdge(getProperty(propertyStartIdx + (row + 5) * 2).displayPropertyName(maxLen+1), edge, false));
+                boardString.append(" ".repeat(size - (maxLen + 1) * 2 - 1));
+                boardString.append(surroundWithEdge(getProperty(propertyStartIdx + (row + 5) * 2).displayPropertyName(maxLen + 1), edge, false));
                 boardString.append(System.lineSeparator());
-                // TODO: add players here, comma separated if multiple
-                boardString.append(surroundWithEdge(centerString(" ", maxLen), edge, false));
-                boardString.append(" ".repeat(size - (maxLen+1) * 2 - 1));
-                boardString.append(surroundWithEdge(centerString(" ", maxLen+1), edge, false));
+
+                // Add players
+                boardString.append(
+                        surroundWithEdge(
+                                centerString(printPlayersOnProperty(propertyStartIdx, maxLen), maxLen),
+                                edge,
+                                false
+                        )
+                );
+                boardString.append(" ".repeat(size - (maxLen + 1) * 2 - 1));
+                boardString.append(
+                        surroundWithEdge(
+                                centerString(printPlayersOnProperty(propertyStartIdx + (row + 5) * 2, maxLen), maxLen + 1),
+                                edge,
+                                false
+                        )
+                );
                 boardString.append(System.lineSeparator());
             }
             row++;
         }
-        // Board
-        // L0: 20 - 30 (free parking - go to jail)
-        // L1: 19 & 31 + 12
-        // L2: 18 & 32 + 14
-        // L3: 17 & 33 + 16
-        // L4: 16 & 34
-        // L5: 15 & 35
-        // L6: 14 & 36
-        // L7: 13 & 37
-        // L8: 12 & 38
-        // L9: 11 & 39 (st charles & Boardwalk)
-        // L10: 10 - 0 (GO -> JAIL)
-
         boardString.append(makeBorder(size, corner, dash));
         return boardString.toString();
     }
@@ -153,10 +198,43 @@ public class Board {
         return edge + str + edge;
     }
 
+    private String printPlayersOnProperty(int propertyIdx, int maxSize) {
+        StringBuilder playerString = new StringBuilder();
+        for (HashMap.Entry<String, Integer> entry : getPlayerPositions().entrySet()) {
+            if (entry.getValue() == propertyIdx) {
+                playerString.append(entry.getKey()).append(", ");
+            }
+        }
+
+        // remove trailing comma
+        if (!playerString.isEmpty()) {
+            playerString.setLength(playerString.length() - 2);
+        }
+
+        if (playerString.length() > maxSize) {
+            // Show only first letter of each name (can improve later)
+            String[] names = playerString.toString().split(", ");
+            for (int i = 0; i < names.length; i++) {
+                names[i] = Character.toString(names[i].charAt(0));
+            }
+            return String.join(", ", names);
+        }
+
+        return playerString.toString();
+    }
+
     static String centerString(String str, int maxSize) {
         int spacer = maxSize - str.length();
         int leading = spacer / 2;
         int trailing = spacer - leading;
         return " ".repeat(leading) + str + " ".repeat(trailing);
+    }
+
+    public HashMap<String, Integer> getPlayerPositions() {
+        return playerPositions;
+    }
+
+    public void setPlayerPosition(Player p) {
+        this.playerPositions.put(p.getNameNoColor(), p.getLocation());
     }
 }

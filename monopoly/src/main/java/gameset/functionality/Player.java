@@ -114,9 +114,7 @@ public class Player {
         railRoadCounter -= 1;
     }
 
-
-
-
-
-
+    public String getNameNoColor() {
+        return name;
+    }
 }

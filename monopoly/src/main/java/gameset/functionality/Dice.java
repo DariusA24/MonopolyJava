@@ -40,6 +40,7 @@ public class Dice {
                 "Dice 2 is: " + this.dice2 +
                 System.lineSeparator() +
                 "Roll is: " + this.rollTotal +
+                System.lineSeparator() +
                 "----------------";
     }
 
