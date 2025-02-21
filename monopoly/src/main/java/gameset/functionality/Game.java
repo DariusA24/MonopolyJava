@@ -113,7 +113,7 @@ public class Game {
                         System.out.println(c);
                         c.applyEffect(player, this);
                     }
-                    case "community" -> {
+                    case "community chest" -> {
                         CommunityChestCard c = board.getCommunityChestCards().draw();
                         System.out.println(c);
                         c.applyEffect(player, this);

@@ -251,7 +251,7 @@
   },
   {
     "name": "Community Chest",
-    "type": "space",
+    "type": "card",
     "price": 0,
     "color": "",
     "rentWithBuildingsList": [0]
