@@ -15,6 +15,9 @@ public class Game {
     private GameScreen gameScreen = new GameScreen();
     private GameInitializer gameInitializer = new GameInitializer();
 
+    public ArrayList<Player> getPlayerList() {
+        return playerList;
+    }
 
     /**
      * This method will be used to list the players stats. Having this as a
