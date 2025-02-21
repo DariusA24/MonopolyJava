@@ -24,4 +24,13 @@ public class ChanceCardTest {
         assertEquals(description, card.description);
         assertEquals(params, card.params);
     }
+
+    @Test
+    public void testToString() {
+        Action action = Action.Advance;
+        String description = "Advance to Go (Collect $200)";
+        Map<String, Object> params = new HashMap<>();
+        ChanceCard card = new ChanceCard(action, description, params);
+        assertEquals("Chance\nAdvance to Go (Collect $200)", card.toString());
+    }
 }
