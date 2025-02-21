@@ -1,9 +1,8 @@
-package gameset.functionality.deck;
+package gameset.functionality;
 
 import gameset.cards.Action;
 import gameset.cards.Card;
 import gameset.cards.ChanceCard;
-import gameset.functionality.Deck;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
