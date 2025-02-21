@@ -24,6 +24,4 @@ public class CommunityChestCardTest {
         assertEquals(description, card.description);
         assertEquals(params, card.params);
     }
-    // TODO: GH issue #28 - test displaying card information
-    // TODO: GH issue #29, 30, 31 - test applyEffect
 }

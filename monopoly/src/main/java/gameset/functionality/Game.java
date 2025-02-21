@@ -19,6 +19,10 @@ public class Game {
         return playerList;
     }
 
+    public void setPlayerList(ArrayList<Player> playerList) {
+        this.playerList = playerList;
+    }
+
     /**
      * This method will be used to list the players stats. Having this as a
      * placeholder method to test.
