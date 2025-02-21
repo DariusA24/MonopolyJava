@@ -4,7 +4,6 @@ import gameset.cards.ChanceCard;
 import gameset.cards.CommunityChestCard;
 import gameutils.Ansi;
 import gameutils.ResourceParser;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +33,10 @@ public class Board {
         System.out.println("Player: ");
         player.displayColoredName();
         System.out.println(" Passed Go, Collect: " + Ansi.ANSI_GREEN + " $200 " + Ansi.ANSI_RESET);
+    }
+
+    public Long getPropertiesColorCount(String color) {
+        return this.gameBoard.stream().filter(property -> property.getColor().equals(color)).count();
     }
 
     public Property getProperty(int location) {

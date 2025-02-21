@@ -2,6 +2,7 @@ package gameset.functionality;
 
 import gameutils.Ansi;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -66,7 +67,7 @@ public class GameInitializer {
      * It will then create the player objects and set them in an array list.
      * @param playerAmount sets the amount of players that will be playing the game
      */
-    public ArrayList<Player> setPlayers(int playerAmount) {
+    public ArrayList<Player> setPlayers(int playerAmount) throws IOException {
         int i = 0;
         Stack<String> colorStack = CreateColorStack();
         ArrayList<Player> initialPlayerList = new ArrayList<Player>();

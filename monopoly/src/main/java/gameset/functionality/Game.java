@@ -1,5 +1,6 @@
 package gameset.functionality;
 
+import gameset.screens.BuildingScreen;
 import gameset.screens.GameScreen;
 import gameutils.Ansi;
 
@@ -13,6 +14,7 @@ public class Game {
     private Scanner userInput = new Scanner(System.in);
     private boolean rollAgain = false;
     private GameScreen gameScreen = new GameScreen();
+    private BuildingScreen buildingScreen = new BuildingScreen();
     private GameInitializer gameInitializer = new GameInitializer();
 
 
@@ -33,10 +35,29 @@ public class Game {
     }
 
     /**
+     * Purchases the hotel / building if able
      * @param property
      * @param player
      */
-    private void purchaseProperty(Property property, Player player) {
+    private void purchaseBuildings(Property property, Player player) {
+        if (player.canPurchaseBuilding(property.getColor())) {
+            int cost = property.getBuildingPrice();
+            if (cost - player.getMoney() >= 0) {
+                player.setMoney(player.getMoney() - cost);
+                property.buildBuilding();
+                System.out.println("You purchased your " + property.getNumHouses() + " houses of " + property.displayPropertyName());
+            }
+        }
+        else {
+            System.out.println("Unable to purchase building due to you not having all colorset for: " + property.getColor());
+        }
+    }
+
+    /**
+     * @param property
+     * @param player
+     */
+    private void purchaseProperty(Property property, Player player, Board board) throws IOException {
         System.out.println("Your balance is: " + Ansi.ANSI_GREEN + player.getMoney() + Ansi.ANSI_RESET);
         System.out.println("Press P to purchase: ");
         System.out.println("Press F to skip: ");
@@ -46,7 +67,7 @@ public class Game {
         while (!flag) {
             if (input.equals("P") || input.equals("p")) {
                 if (player.checkBalance(property.getPrice())) {
-                    player.addProperty(property);
+                    player.addProperty(property, board);
                     player.setMoney(player.getMoney() - property.getPrice());
                     System.out.println("Purchasing: " + property.displayPropertyName());
                     System.out.println("Player balance is: " + Ansi.ANSI_GREEN + player.getMoney() + Ansi.ANSI_RESET);
@@ -69,14 +90,14 @@ public class Game {
      * @param property
      * @param player
      */
-    private void viewProperty(Property property, Player player) {
+    private void viewProperty(Property property, Player player, Board board) throws IOException {
         if (property.getOwner().isEmpty()) {
             System.out.println("Property is not owned");
             System.out.println("Press E to view details about the property");
             String input = userInput.next();
             if (input.equals("E") || input.equals("e")) {
                 System.out.println(property);
-                purchaseProperty(property, player);
+                purchaseProperty(property, player, board);
 
             }
         } else {
@@ -95,13 +116,13 @@ public class Game {
      * @param player
      * @param board
      */
-    private void handlePlayerLanding(int landingSpot, Player player, Board board) {
+    private void handlePlayerLanding(int landingSpot, Player player, Board board) throws IOException {
         Property property = board.getProperty(landingSpot);
         System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Landed on " + property.displayPropertyName());
         System.out.println("---------------");
         String propertyType = property.getType();
         switch (propertyType) {
-            case "property" -> viewProperty(board.getGameBoard().get(landingSpot), player);
+            case "property" -> viewProperty(board.getGameBoard().get(landingSpot), player, board);
             case "railroad" -> System.out.println("Landed on a railroad");
             case "tax" -> System.out.println("Landed on tax");
             // TODO: GH issue #28 (Chance/Community card display - implement around here)
@@ -182,21 +203,27 @@ public class Game {
      * @param player
      * @param board
      */
-    private void playerTurn(Player player, Board board) {
+    private void playerTurn(Player player, Board board) throws IOException {
         if (player.getJailStatus()) {
             handlePlayerInJail(player);
         } else {
             // TODO: GH issue #27 (Chance/Community card drawing - implement around here)
             int landingSpot = getLandingSpot(player, board);
-            player.updatePosition(landingSpot);
             board.setPlayerPosition(player);
-            System.out.println(board);
+            player.updatePosition(landingSpot);
             handlePlayerLanding(landingSpot, player, board);
         }
         String choice = gameScreen.turnMenu();
         while (!choice.equals("1")) {
             if (choice.equals("2")) {
-                player.displayPropertes();
+                player.displayProperties(board);
+                if (!player.getProperties().isEmpty()) {
+                    int purchasedBuilding = buildingScreen.displayPropertyScreen(player);
+                    if (purchasedBuilding != 0) {
+                        Property property = player.getProperties().get(purchasedBuilding - 1);
+                        purchaseBuildings(property, player);
+                    }
+                }
             }
             if (choice.equals("3")) {
                 System.out.println("Choice not yet made");

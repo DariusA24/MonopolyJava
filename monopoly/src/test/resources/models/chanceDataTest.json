@@ -1,0 +1,9 @@
+[
+  {
+    "description": "Advance to Go. (Collect $200)",
+    "action": "Advance",
+    "params": {
+      "targetLocation": "Go"
+    }
+  }
+]

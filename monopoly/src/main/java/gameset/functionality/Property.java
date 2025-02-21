@@ -124,6 +124,19 @@ public class Property {
     }
 
     /**
+     * Gets the price of the building depending on the color.
+     */
+    public int getBuildingPrice() {
+        return switch (color) {
+            case "brown", "cyan" -> 50;
+            case "pink", "orange" -> 100;
+            case "red", "yellow" -> 150;
+            case "green", "blue" -> 200;
+            default -> 0;
+        };
+    }
+
+    /**
      * Changes the rent based on the number of houses the property has.
      */
     private void changeRent() {
