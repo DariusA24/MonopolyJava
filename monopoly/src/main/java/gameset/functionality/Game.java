@@ -1,5 +1,7 @@
 package gameset.functionality;
 
+import gameset.cards.ChanceCard;
+import gameset.cards.CommunityChestCard;
 import gameset.screens.GameScreen;
 import gameutils.Ansi;
 
@@ -40,10 +42,10 @@ public class Game {
         System.out.println("Your balance is: " + Ansi.ANSI_GREEN + player.getMoney() + Ansi.ANSI_RESET);
         System.out.println("Press P to purchase: ");
         System.out.println("Press F to skip: ");
-        String input = userInput.next();
         System.out.println("******************");
         boolean flag = false;
         while (!flag) {
+            String input = userInput.next();
             if (input.equals("P") || input.equals("p")) {
                 if (player.checkBalance(property.getPrice())) {
                     player.addProperty(property);
@@ -104,8 +106,20 @@ public class Game {
             case "property" -> viewProperty(board.getGameBoard().get(landingSpot), player);
             case "railroad" -> System.out.println("Landed on a railroad");
             case "tax" -> System.out.println("Landed on tax");
-            // TODO: GH issue #28 (Chance/Community card display - implement around here)
-            case "card" -> System.out.println("Landed on a card");
+            case "card" -> {
+                switch (property.getName().toLowerCase()) {
+                    case "chance" -> {
+                        ChanceCard c = board.getChanceCards().draw();
+                        System.out.println(c);
+                        c.applyEffect(player, this);
+                    }
+                    case "community" -> {
+                        CommunityChestCard c = board.getCommunityChestCards().draw();
+                        System.out.println(c);
+                        c.applyEffect(player, this);
+                    }
+                }
+            }
             default -> System.out.println("Landed on a space");
         }
         System.out.println("---------------");
@@ -186,7 +200,6 @@ public class Game {
         if (player.getJailStatus()) {
             handlePlayerInJail(player);
         } else {
-            // TODO: GH issue #27 (Chance/Community card drawing - implement around here)
             int landingSpot = getLandingSpot(player, board);
             player.updatePosition(landingSpot);
             board.setPlayerPosition(player);

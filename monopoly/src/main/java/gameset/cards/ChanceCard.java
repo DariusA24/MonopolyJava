@@ -31,4 +31,11 @@ public class ChanceCard extends Card {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "Chance" +
+                System.lineSeparator() +
+                this.description;
+    }
 }
