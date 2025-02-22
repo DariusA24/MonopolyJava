@@ -76,10 +76,30 @@ public class Player {
         }
     }
 
-    public void addProperty(Property property, Board board) {
+    /**
+     * Adds a property to the player property list.
+     *
+     * <p>This method is responsible for adding a property to the players list.
+     * When adding the property it also calls colorSets.puts which adds the color and
+     * creates a boolean determining whether the player has monopoly for that colorset.
+     *
+     * @param property the property that would be added
+     * @param board the board object
+     */
+    public void addProperty(Property property, Board board) throws IOException {
         this.properties.add(property);
+        colorSets.put(property.getColor(), hasMonopoly(property, board));
     }
 
+    /**
+     * Checks if player can purchase buildings for the property.
+     *
+     * <p>This checks the players colorsets. If they own the color in the colorset,
+     * it will then check the value to the color. If it is true, then that means
+     * that they have monopoly.
+     *
+     * @param color the property that would be added
+     */
     public boolean canPurchaseBuilding(String color){
         if(colorSets.containsKey(color)){
             return colorSets.get(color);
@@ -91,6 +111,17 @@ public class Player {
         return board.getPropertiesColorCount(color);
     }
 
+    /**
+     * Checks if player has monopoly.
+     *
+     * <p>Method checks the players properties and filters on the color.
+     * It will then get the total amount of colors that the property has
+     * and how many the player owns. If it is the same, then it will set
+     * hasMonopoly to true.
+     *
+     * @param property the property that would be added
+     * @param board the property that would be added
+     */
     private boolean hasMonopoly(Property property, Board board) throws IOException {
         String color = property.getColor();
 
@@ -98,7 +129,7 @@ public class Player {
                 .filter(p -> p.getColor().equals(color))
                 .count();
 
-        long totalColorProperties = (long) getPropertiesByColor(color, board);
+        long totalColorProperties = getPropertiesByColor(color, board);
 
         return ownedColorProperties == totalColorProperties;
     }

@@ -6,5 +6,12 @@
     "color": "blue",
     "mortgage": 175,
     "rentWithBuildingsList": [35, 175, 500, 1100, 1300, 1500]
+  },
+  {
+    "name": "Boardwalk",
+    "type": "property",
+    "color": "blue",
+    "rentWithBuildingsList": [50, 250, 700, 1500, 1850, 2200],
+    "mortgage": 200
   }
 ]

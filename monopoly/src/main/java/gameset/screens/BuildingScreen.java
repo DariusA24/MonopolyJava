@@ -7,8 +7,16 @@ import gameset.functionality.Property;
 import java.util.Scanner;
 
 public class BuildingScreen {
-    public int displayPropertyScreen(Player player) {
-        Scanner scanner = new Scanner(System.in);
+    /**
+     * Screen which allows players to choose a property that they would like to build buildings on.
+     *
+     * <p>This method displays a screen and allows input from the user on the property
+     * that they would like to build buildings on.
+     *
+     * @param player the player object
+     * @param scanner which allows input
+     */
+    public int displayPropertyScreen(Player player, Scanner scanner) {
         int propertyBuildingPurchased = 0;
         System.out.println("******************");
         System.out.println("Select property number you would like to view more detail on OR F to exit");
@@ -31,9 +39,8 @@ public class BuildingScreen {
                             input = scanner.nextLine();
                             if (input.equals("B") || input.equals("b")) {
                                 propertyBuildingPurchased = number;
-                            } else {
-                                break;
                             }
+                            break;
                         }
                     } else if (property.getNumHouses() == 5) {
                         System.out.println("You currently own a hotel on this property");
@@ -45,7 +52,6 @@ public class BuildingScreen {
 
             }
         }
-        scanner.close();
         System.out.println("******************");
         return propertyBuildingPurchased;
     }

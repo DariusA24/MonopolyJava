@@ -35,9 +35,13 @@ public class Game {
     }
 
     /**
-     * Purchases the hotel / building if able
-     * @param property
-     * @param player
+     * Checks if player is able to purchase a building on the property.
+     *
+     * <p>This method checks a players properties to see if they are able to purchase
+     * a property. First it checks if the player owns all the colorsets, then it checks the players' money.
+     *
+     * @param player the player object
+     * @param property object which the building will be added to
      */
     private void purchaseBuildings(Property property, Player player) {
         if (player.canPurchaseBuilding(property.getColor())) {
@@ -138,7 +142,7 @@ public class Game {
     }
 
     private void handlePlayerInJail(Player player) {
-        String choice = gameScreen.jailScreen();
+        String choice = gameScreen.jailScreen(userInput);
         boolean jailChoiceFlag = true;
         while (jailChoiceFlag)
             if (choice.equals("1")) {
@@ -213,12 +217,12 @@ public class Game {
             player.updatePosition(landingSpot);
             handlePlayerLanding(landingSpot, player, board);
         }
-        String choice = gameScreen.turnMenu();
+        String choice = gameScreen.turnMenu(userInput);
         while (!choice.equals("1")) {
             if (choice.equals("2")) {
                 player.displayProperties(board);
                 if (!player.getProperties().isEmpty()) {
-                    int purchasedBuilding = buildingScreen.displayPropertyScreen(player);
+                    int purchasedBuilding = buildingScreen.displayPropertyScreen(player, userInput);
                     if (purchasedBuilding != 0) {
                         Property property = player.getProperties().get(purchasedBuilding - 1);
                         purchaseBuildings(property, player);
@@ -228,7 +232,7 @@ public class Game {
             if (choice.equals("3")) {
                 System.out.println("Choice not yet made");
             }
-            choice = gameScreen.turnMenu();
+            choice = gameScreen.turnMenu(userInput);
         }
         System.out.println("Turn ending.");
         System.out.println("**************");

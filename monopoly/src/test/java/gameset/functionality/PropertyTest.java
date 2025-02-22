@@ -17,7 +17,7 @@ public class PropertyTest {
 
         // Check if properties are loaded correctly
         assertNotNull(properties);
-        assertEquals(1, properties.size());
+        assertEquals(2, properties.size());
 
         Property property = properties.getFirst();
 
@@ -38,7 +38,7 @@ public class PropertyTest {
 
         // Check if properties are loaded correctly
         assertNotNull(properties);
-        assertEquals(1, properties.size());
+        assertEquals(2, properties.size());
 
         Property property = properties.getFirst();
 
