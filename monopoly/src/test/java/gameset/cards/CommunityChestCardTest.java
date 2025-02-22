@@ -24,6 +24,14 @@ public class CommunityChestCardTest {
         assertEquals(description, card.description);
         assertEquals(params, card.params);
     }
-    // TODO: GH issue #28 - test displaying card information
+
+    @Test
+    public void testToString() {
+        Action action = Action.Advance;
+        String description = "Advance to Go (Collect $200)";
+        Map<String, Object> params = new HashMap<>();
+        CommunityChestCard card = new CommunityChestCard(action, description, params);
+        assertEquals("Community Chest\nAdvance to Go (Collect $200)", card.toString());
+    }
     // TODO: GH issue #29, 30, 31 - test applyEffect
 }
