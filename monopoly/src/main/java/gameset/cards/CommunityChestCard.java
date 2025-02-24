@@ -19,4 +19,11 @@ public class CommunityChestCard extends Card {
     public CommunityChestCard(Action action, String description, Map<String, Object> params) {
         super(action, description, params);
     }
+
+    @Override
+    public String toString() {
+        return "Community Chest" +
+                System.lineSeparator() +
+                this.description;
+    }
 }

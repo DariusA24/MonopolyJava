@@ -19,4 +19,11 @@ public class ChanceCard extends Card {
     public ChanceCard(Action action, String description, Map<String, Object> params) {
         super(action, description, params);
     }
+
+    @Override
+    public String toString() {
+        return "Chance" +
+                System.lineSeparator() +
+                this.description;
+    }
 }
