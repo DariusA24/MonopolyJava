@@ -6,20 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-
     private String name;
     private int playerMoney;
-
     private final String color;
-
     private int location;
     private final List<Property> properties = new ArrayList<Property>();
-
     private boolean inJail;
-
+    private boolean isBankrupt;
     private int doubleRollCounter;
     public int railRoadCounter;
-
 
     public Player(String name, int money, String color) {
         this.name = name;
@@ -27,6 +22,7 @@ public class Player {
         this.color = color;
         this.location = 0;
         this.inJail = false;
+        this.isBankrupt = money < 0;
     }
 
     public String getName() {
@@ -63,6 +59,7 @@ public class Player {
 
     public void setMoney(int newMoney) {
         this.playerMoney = newMoney;
+        this.isBankrupt = playerMoney < 0;
     }
 
     public void setDoubleRollCounter(boolean rolledDouble) {
@@ -79,6 +76,7 @@ public class Player {
 
     public void addMoney(int money) {
         this.playerMoney += money;
+        this.isBankrupt = playerMoney < 0;
     }
 
     public void goToJail() {
@@ -113,7 +111,7 @@ public class Player {
     }
 
     public boolean isBankrupt() {
-        return playerMoney < 0;
+        return this.isBankrupt;
     }
 
     private void purchasedRailroad() {

@@ -204,6 +204,8 @@ public class Game {
      * @param board
      */
     private void playerTurn(Player player, Board board) {
+        // TODO: We can add check if bankrupt here to handle mortgages first
+        // Then we can fall into the if/else logic
         if (player.getJailStatus()) {
             handlePlayerInJail(player);
         } else {
