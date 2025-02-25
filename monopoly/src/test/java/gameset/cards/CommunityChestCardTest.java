@@ -33,5 +33,4 @@ public class CommunityChestCardTest {
         CommunityChestCard card = new CommunityChestCard(action, description, params);
         assertEquals("Community Chest\nAdvance to Go (Collect $200)", card.toString());
     }
-    // TODO: GH issue #29, 30, 31 - test applyEffect
 }
