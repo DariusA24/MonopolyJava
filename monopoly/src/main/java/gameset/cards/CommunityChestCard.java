@@ -31,4 +31,11 @@ public class CommunityChestCard extends Card {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "Community Chest" +
+                System.lineSeparator() +
+                this.description;
+    }
 }
