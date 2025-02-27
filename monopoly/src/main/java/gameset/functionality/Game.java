@@ -48,10 +48,13 @@ public class Game {
     private void purchaseBuildings(Property property, Player player) {
         if (player.canPurchaseBuilding(property.getColor())) {
             int cost = property.getBuildingPrice();
-            if (cost - player.getMoney() >= 0) {
+            if (player.getMoney() - cost >= 0) {
                 player.setMoney(player.getMoney() - cost);
                 property.buildBuilding();
                 System.out.println("You purchased your " + property.getNumHouses() + " houses of " + property.displayPropertyName());
+            }
+            else {
+                System.out.println("Unable to purchase building due to insufficient funds");
             }
         }
         else {
