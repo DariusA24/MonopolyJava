@@ -6,6 +6,7 @@ import gameutils.Ansi;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class CardTest {
     }
 
     @Test
-    public void testApplyEffectMoneyReceive() {
+    public void testApplyEffectMoneyReceive() throws IOException {
         // Setup
         HashMap<String, Object> params = new HashMap<>();
         params.put("value", 150);
@@ -47,7 +48,7 @@ public class CardTest {
     }
 
     @Test
-    public void testApplyEffectMoneyReceiveAll() {
+    public void testApplyEffectMoneyReceiveAll() throws IOException {
         // Card Setup
         HashMap<String, Object> params = new HashMap<>();
         params.put("value", 50);
@@ -71,7 +72,7 @@ public class CardTest {
     }
 
     @Test
-    public void testApplyEffectMoneyPay() {
+    public void testApplyEffectMoneyPay() throws IOException {
         // Setup
         HashMap<String, Object> params = new HashMap<>();
         params.put("value", 100);
@@ -88,7 +89,7 @@ public class CardTest {
     }
 
     @Test
-    public void testApplyEffectMoneyPayAll() {
+    public void testApplyEffectMoneyPayAll() throws IOException {
         // Card Setup
         HashMap<String, Object> params = new HashMap<>();
         params.put("value", 50);

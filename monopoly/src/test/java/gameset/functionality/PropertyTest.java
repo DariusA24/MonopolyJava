@@ -1,14 +1,10 @@
 package gameset.functionality;
 
-import gameset.cards.Action;
-import gameset.cards.Card;
 import gameutils.ResourceParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +17,7 @@ public class PropertyTest {
 
         // Check if properties are loaded correctly
         assertNotNull(properties);
-        assertEquals(1, properties.size());
+        assertEquals(2, properties.size());
 
         Property property = properties.getFirst();
 
@@ -42,7 +38,7 @@ public class PropertyTest {
 
         // Check if properties are loaded correctly
         assertNotNull(properties);
-        assertEquals(1, properties.size());
+        assertEquals(2, properties.size());
 
         Property property = properties.getFirst();
 
