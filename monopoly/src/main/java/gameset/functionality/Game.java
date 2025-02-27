@@ -19,6 +19,13 @@ public class Game {
     private BuildingScreen buildingScreen = new BuildingScreen();
     private GameInitializer gameInitializer = new GameInitializer();
 
+    public ArrayList<Player> getPlayerList() {
+        return playerList;
+    }
+
+    public void setPlayerList(ArrayList<Player> playerList) {
+        this.playerList = playerList;
+    }
 
     /**
      * This method will be used to list the players stats. Having this as a
@@ -225,10 +232,11 @@ public class Game {
      * @param board
      */
     private void playerTurn(Player player, Board board) throws IOException {
+        // TODO: We can add check if bankrupt here to handle mortgages first
+        // Then we can fall into the if/else logic
         if (player.getJailStatus()) {
             handlePlayerInJail(player);
         } else {
-            // TODO: GH issue #27 (Chance/Community card drawing - implement around here)
             int landingSpot = getLandingSpot(player, board);
             player.updatePosition(landingSpot);
             board.setPlayerPosition(player);
