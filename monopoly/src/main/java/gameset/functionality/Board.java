@@ -7,6 +7,7 @@ import gameutils.ResourceParser;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 public class Board {
@@ -64,23 +65,14 @@ public class Board {
      * @param type the type of property
      * @return The index of the closest property
      */
-    public int getNearestPropertyType(int location, String type) {
-        ArrayList<Integer> prop_type_idx = (ArrayList<Integer>) gameBoard.stream()
+    public Optional<Integer> getNearestPropertyType(int location, String type) {
+        return gameBoard.stream()
                 .filter(p -> p.getType().equals(type.toLowerCase()))
                 .map(gameBoard::indexOf)
-                .toList();
-        // TODO: this is a bug - I need to advance to nearest, not find the closest
-        int idx_of_closest_prop_type = prop_type_idx.getFirst();
-        int min_dist = Math.abs(idx_of_closest_prop_type - location);
-
-        for (int i = 1; i < prop_type_idx.size(); i++) {
-            int dist = Math.abs(prop_type_idx.get(i) - location);
-            if (dist < min_dist) {
-                idx_of_closest_prop_type = prop_type_idx.get(i);
-                min_dist = dist;
-            }
-        }
-        return idx_of_closest_prop_type;
+                .sorted()
+                // 39 -> 12 (-39), 38 -> 39 (1),
+                .map(p -> p - location < 0 ? p - location + 40 : p - location)
+                .min(Integer::compare);
     }
 
     public Deck<ChanceCard> getChanceCards() {

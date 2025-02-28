@@ -64,10 +64,10 @@ public abstract class Card {
             }
             case AdvanceConditional -> {
                 // contains targetLocation and modifier
-                String targetLocation = (String) this.params.get("targetLocation");
+                String targetType = (String) this.params.get("targetLocation");
                 // TODO: figure out how to do this
+                g.getBoard().getNearestPropertyType(p.getLocation(), targetType).ifPresent(idx -> p.advancePosition(idx, g.getBoard()));
                 int multiplier_for_rent = (int) this.params.get("modifier");
-                g.getBoard().getPropertyPosition(targetLocation).ifPresent(idx -> p.advancePosition(idx, g.getBoard()));
                 System.out.println("TODO: implement chance card - AdvanceConditional");
             }
             case DirectMove -> {
