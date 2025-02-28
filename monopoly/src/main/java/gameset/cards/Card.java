@@ -88,6 +88,9 @@ public abstract class Card {
                 if (this.params.containsKey("targetLocation")) {
                     String targetLocation = (String) this.params.get("targetLocation");
                     g.getBoard().getPropertyPosition(targetLocation).ifPresent(idx -> p.updatePosition(idx, g.getBoard()));
+                    if (targetLocation.equals("Jail")) {
+                        p.goToJail();
+                    }
                 }
                 if (this.params.containsKey("modifier")) {
                     int modifier = (int) this.params.get("modifier");
