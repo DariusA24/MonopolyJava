@@ -5,10 +5,7 @@ import gameset.cards.CommunityChestCard;
 import gameutils.Ansi;
 import gameutils.ResourceParser;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.OptionalInt;
+import java.util.*;
 
 public class Board {
     private final HashMap<String, Integer> playerPositions = new HashMap<>();
@@ -67,7 +64,7 @@ public class Board {
      */
     public Optional<Integer> getNearestPropertyType(int location, String type) {
         return gameBoard.stream()
-                .filter(p -> p.getType().equals(type.toLowerCase()))
+                .filter(p -> p.getType().equalsIgnoreCase(type))
                 .map(gameBoard::indexOf)
                 .sorted()
                 // 39 -> 12 (-39), 38 -> 39 (1),

@@ -75,8 +75,22 @@ public class Property {
         return numHouses;
     }
 
-    public Integer getRent() {
-        return rentWithBuildingsList.get(numHouses);
+    public Integer getRent(int previousRoll) {
+        if (type.equalsIgnoreCase("utility")) {
+            // TODO: known bug here, if player has monopoly, then rent is 10x not 4x
+            return 4 * previousRoll;
+        } else {
+            return rentWithBuildingsList.get(numHouses);
+        }
+    }
+
+    public String printRent() {
+        if (type.equalsIgnoreCase("utility")) {
+            // TODO: known bug here, if player has monopoly, then rent is 10x not 4x
+            return "4 times amount shown on dice";
+        } else {
+            return rentWithBuildingsList.get(numHouses).toString();
+        }
     }
 
     public String getOwner() {
@@ -100,7 +114,7 @@ public class Property {
                 System.lineSeparator() +
                 "Price: " + this.price +
                 System.lineSeparator() +
-                "Rent: " + getRent() +
+                "Rent: " + printRent() +
                 System.lineSeparator() +
                 "Owned: " + this.owner +
                 System.lineSeparator() +

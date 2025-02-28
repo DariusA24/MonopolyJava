@@ -86,6 +86,7 @@ public class Player {
      */
     public void addProperty(Property property, Board board) throws IOException {
         this.properties.add(property);
+        property.setOwner(getNameNoColor());
         colorSets.put(property.getColor(), hasMonopoly(property, board));
     }
 
@@ -185,13 +186,13 @@ public class Player {
         return true;
     }
 
-    public void displayProperties(Board board) {
+    public void displayProperties(Game game) {
         int propertyCounter = 1;
         System.out.println("----------------------");
         System.out.println("Your properties are: ");
         for (Property property : properties) {
             System.out.println(propertyCounter + ". " + property.displayPropertyName());
-            System.out.println(" - Rent: " + property.getRent() + "\n");
+            System.out.println(" - Rent: " + property.getRent(game.getDice().getRollTotal()) + "\n");
             propertyCounter++;
         }
         System.out.println("----------------------");

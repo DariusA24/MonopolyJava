@@ -28,6 +28,14 @@ public class Dice {
         this.doubles = dice1 == dice2;
     }
 
+    public int getRollTotal() {
+        return rollTotal;
+    }
+
+    public void setRollTotal(int rollTotal) {
+        this.rollTotal = rollTotal;
+    }
+
     /**
      * Prints the result of the roll.
      */

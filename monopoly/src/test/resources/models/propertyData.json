@@ -1,0 +1,303 @@
+[
+  {
+    "name": "Go",
+    "type": "space",
+    "price": 0,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Mediterranean Ave.",
+    "type": "property",
+    "price": 60,
+    "color": "brown",
+    "rentWithBuildingsList": [2, 10, 30, 90, 160, 250],
+    "mortgage": 30
+  },
+  {
+    "name": "Community Chest",
+    "type": "card",
+    "price": 0,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Baltic Ave.",
+    "type": "property",
+    "price": 60,
+    "color": "brown",
+    "rentWithBuildingsList": [4, 20, 60, 180, 320, 450],
+    "mortgage": 30
+  },
+  {
+    "name": "Income Tax",
+    "type": "tax",
+    "price": 0,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Reading Railroad",
+    "type": "railroad",
+    "price": 200,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Oriental Ave.",
+    "type": "property",
+    "price": 100,
+    "color": "cyan",
+    "rentWithBuildingsList": [6, 30, 90, 270, 400, 550],
+    "mortgage": 50
+  },
+  {
+    "name": "Chance",
+    "type": "card",
+    "price": 0,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Vermont Ave.",
+    "type": "property",
+    "price": 100,
+    "color": "cyan",
+    "rentWithBuildingsList": [6, 30, 90, 270, 400, 550],
+    "mortgage": 50
+  },
+  {
+    "name": "Connecticut Ave.",
+    "type": "property",
+    "price": 120,
+    "color": "cyan",
+    "rentWithBuildingsList": [8, 40, 100, 300, 450, 600],
+    "mortgage": 60
+  },
+  {
+    "name": "Jail",
+    "type": "space",
+    "price": 0,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "St. Charles Place",
+    "type": "property",
+    "price": 140,
+    "color": "pink",
+    "rentWithBuildingsList": [10, 50, 150, 450, 625, 750],
+    "mortgage": 70
+  },
+  {
+    "name": "Electric Company",
+    "type": "utility",
+    "price": 150,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "States Ave.",
+    "type": "property",
+    "price": 140,
+    "color": "pink",
+    "rentWithBuildingsList": [10, 50, 150, 450, 625, 750],
+    "mortgage": 70
+  },
+  {
+    "name": "Virginia Ave.",
+    "type": "property",
+    "price": 160,
+    "color": "pink",
+    "rentWithBuildingsList": [12, 60, 180, 500, 700, 900],
+    "mortgage": 80
+  },
+  {
+    "name": "Pennsylvania Railroad",
+    "type": "railroad",
+    "price": 200,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "St. James Place",
+    "type": "property",
+    "price": 180,
+    "color": "orange",
+    "rentWithBuildingsList": [14, 70, 200, 550, 750, 950],
+    "mortgage": 90
+  },
+  {
+    "name": "Community Chest",
+    "type": "card",
+    "price": 0,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Tennessee Ave.",
+    "type": "property",
+    "price": 180,
+    "color": "orange",
+    "rentWithBuildingsList": [14, 70, 200, 550, 750, 950],
+    "mortgage": 90
+  },
+  {
+    "name": "New York Ave.",
+    "type": "property",
+    "price": 200,
+    "color": "orange",
+    "rentWithBuildingsList": [16, 80, 220, 600, 800, 1000],
+    "mortgage": 100
+  },
+  {
+    "name": "Free Parking",
+    "type": "space",
+    "price": 0,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Kentucky Ave.",
+    "type": "property",
+    "price": 220,
+    "color": "red",
+    "rentWithBuildingsList": [18, 90, 250, 700, 875, 1050],
+    "mortgage": 110
+  },
+  {
+    "name": "Chance",
+    "type": "card",
+    "price": 0,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Indiana Ave.",
+    "type": "property",
+    "price": 220,
+    "color": "red",
+    "rentWithBuildingsList": [20, 100, 300, 750, 925, 1100],
+    "mortgage": 110
+  },
+  {
+    "name": "Illinois Ave.",
+    "type": "property",
+    "price": 240,
+    "color": "red",
+    "rentWithBuildingsList": [22, 110, 330, 800, 975, 1150],
+    "mortgage": 120
+  },
+  {
+    "name": "B. & O. Railroad",
+    "type": "railroad",
+    "price": 200,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Atlantic Ave.",
+    "type": "property",
+    "price": 260,
+    "color": "yellow",
+    "rentWithBuildingsList": [24, 120, 360, 850, 1025, 1200],
+    "mortgage": 130
+  },
+  {
+    "name": "Ventnor Ave.",
+    "type": "property",
+    "price": 260,
+    "color": "yellow",
+    "rentWithBuildingsList": [24, 120, 360, 850, 1025, 1200],
+    "mortgage": 130
+  },
+  {
+    "name": "Water Works",
+    "type": "utility",
+    "price": 150,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Marvin Gardens",
+    "type": "property",
+    "price": 280,
+    "color": "yellow",
+    "rentWithBuildingsList": [26, 130, 390, 900, 1100, 1275],
+    "mortgage": 140
+  },
+  {
+    "name": "Go to Jail",
+    "type": "space",
+    "price": 0,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Pacific Ave.",
+    "type": "property",
+    "price": 300,
+    "color": "green",
+    "rentWithBuildingsList": [30, 150, 450, 1000, 1200, 1400],
+    "mortgage": 150
+  },
+  {
+    "name": "North Carolina Ave.",
+    "type": "property",
+    "price": 300,
+    "color": "green",
+    "rentWithBuildingsList": [30, 150, 450, 1000, 1200, 1400],
+    "mortgage": 150
+  },
+  {
+    "name": "Community Chest",
+    "type": "card",
+    "price": 0,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Pennsylvania Ave.",
+    "type": "property",
+    "price": 320,
+    "color": "green",
+    "rentWithBuildingsList": [34, 170, 500, 1100, 1300, 1500],
+    "mortgage": 160
+  },
+  {
+    "name": "Short Line",
+    "type": "railroad",
+    "price": 200,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Chance",
+    "type": "card",
+    "price": 0,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Park Place",
+    "type": "property",
+    "price": 350,
+    "color": "blue",
+    "rentWithBuildingsList": [35, 175, 500, 1100, 1300, 1500],
+    "mortgage": 175
+  },
+  {
+    "name": "Luxury Tax",
+    "type": "tax",
+    "price": 0,
+    "color": "",
+    "rentWithBuildingsList": [0]
+  },
+  {
+    "name": "Boardwalk",
+    "type": "property",
+    "color": "blue",
+    "rentWithBuildingsList": [50, 250, 700, 1500, 1850, 2200],
+    "mortgage": 200
+  }
+]

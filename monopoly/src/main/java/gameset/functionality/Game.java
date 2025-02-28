@@ -20,6 +20,10 @@ public class Game {
     private GameInitializer gameInitializer = new GameInitializer();
     private Board board;
 
+    public Dice getDice() {
+        return dice;
+    }
+
     public Board getBoard() {
         return board;
     }
@@ -126,10 +130,11 @@ public class Game {
 
             }
         } else {
+            int rentDue = property.getRent(this.dice.getRollTotal());
             System.out.println("Property is owned by: " + property.getOwner());
-            System.out.println("Rent is: " + property.getRent());
-            System.out.println("Transaction details: " + player.getMoney() + " - " + property.getRent());
-            player.setMoney(player.getMoney() - property.getRent());
+            System.out.println("Rent is: " + rentDue);
+            System.out.println("Transaction details: " + player.getMoney() + " - " + rentDue);
+            player.setMoney(player.getMoney() - rentDue);
 
         }
     }
@@ -145,7 +150,7 @@ public class Game {
         System.out.println("---------------");
         String propertyType = property.getType();
         switch (propertyType) {
-            case "property" -> viewProperty(property, player);
+            case "utility", "property" -> viewProperty(property, player);
             case "railroad" -> System.out.println("Landed on a railroad");
             case "tax" -> System.out.println("Landed on tax");
             case "card" -> {
@@ -250,7 +255,7 @@ public class Game {
         String choice = gameScreen.turnMenu(userInput);
         while (!choice.equals("1")) {
             if (choice.equals("2")) {
-                player.displayProperties(board);
+                player.displayProperties(this);
                 if (!player.getProperties().isEmpty()) {
                     int purchasedBuilding = buildingScreen.displayPropertyScreen(player, userInput);
                     if (purchasedBuilding != 0) {

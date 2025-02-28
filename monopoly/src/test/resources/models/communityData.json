@@ -1,0 +1,120 @@
+[
+  {
+    "description": "Advance to Go. (Collect $200)",
+    "action": "Advance",
+    "params": {
+      "targetLocation": "Go"
+    }
+  },
+  {
+    "description": "Bank error in your favor. Collect $200.",
+    "action": "MoneyReceive",
+    "params": {
+      "value": 200
+    }
+  },
+  {
+    "description": "Doctor's fees. Pay $50.",
+    "action": "MoneyPay",
+    "params": {
+      "value": 50
+    }
+  },
+  {
+    "description": "From sale of stock you get $50.",
+    "action": "MoneyReceive",
+    "params": {
+      "value": 50
+    }
+  },
+  {
+    "description": "Get Out of Jail Free. This card may be kept until needed, or traded/sold.",
+    "action": "GetOutOfJailCard",
+    "params": {}
+  },
+  {
+    "description": "Go to Jail. Go directly to Jail. Do not pass GO, do not collect $200.",
+    "action": "DirectMove",
+    "params": {
+      "targetLocation": "Jail"
+    }
+  },
+  {
+    "description": "Grand Opera Night. Collect $50 from every player for opening night seats.",
+    "action": "MoneyReceiveAll",
+    "params": {
+      "value": 50
+    }
+  },
+  {
+    "description": "Holiday Fund matures. Receive $100.",
+    "action": "MoneyReceive",
+    "params": {
+      "value": 100
+    }
+  },
+  {
+    "description": "Income tax refund. Collect $20.",
+    "action": "MoneyReceive",
+    "params": {
+      "value": 20
+    }
+  },
+  {
+    "description": "It is your birthday. Collect $10 from each player.",
+    "action": "MoneyReceiveAll",
+    "params": {
+      "value": 10
+    }
+  },
+  {
+    "description": "Life insurance matures. Collect $100.",
+    "action": "MoneyReceive",
+    "params": {
+      "value": 100
+    }
+  },
+  {
+    "description": "Hospital Fees. Pay $50.",
+    "action": "MoneyPay",
+    "params": {
+      "value": 50
+    }
+  },
+  {
+    "description": "School fees. Pay $50.",
+    "action": "MoneyPay",
+    "params": {
+      "value": 50
+    }
+  },
+  {
+    "description": "Receive $25 consultancy fee.",
+    "action": "MoneyReceive",
+    "params": {
+      "value": 25
+    }
+  },
+  {
+    "description": "You are assessed for street repairs: Pay $40 per house and $115 per hotel you own.",
+    "action": "OwnedPropertyPay",
+    "params": {
+      "housePay": 40,
+      "hotelPay": 115
+    }
+  },
+  {
+    "description": "You have won second prize in a beauty contest. Collect $10.",
+    "action": "MoneyReceive",
+    "params": {
+      "value": 10
+    }
+  },
+  {
+    "description": "You inherit $100.",
+    "action": "MoneyReceive",
+    "params": {
+      "value": 100
+    }
+  }
+]

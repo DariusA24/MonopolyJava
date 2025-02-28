@@ -158,4 +158,59 @@ public class CardTest {
         // 2. ensure player does not receive $200 (because they do not pass go)
         assertEquals(0, playerList.getFirst().getMoney());
     }
+
+    @Test
+    public void testApplyEffectAdvanceConditionalToUtilityNoPassGo() {
+        // Card Setup
+        params.put("targetLocation", "Utility");
+        params.put("modifier", 10);
+        ChanceCard card = new ChanceCard(Action.AdvanceConditional, "Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total 10 times the amount thrown.", params);
+
+        // Player Setup - on chance card position
+        playerList.getFirst().updatePosition(22, game.getBoard());
+
+        // Test
+        card.applyEffect(playerList.getFirst(), game);
+        // 1. ensure player moves to Water Works
+        assertEquals(28, playerList.getFirst().getLocation());
+        // 2. ensure player pay/receive (no pass go + no player owns property)
+        assertEquals(0, playerList.getFirst().getMoney());
+    }
+
+    @Test
+    public void testApplyEffectAdvanceConditionalToUtilityNoPassGoOwnedByOther() throws IOException {
+        // Card Setup
+        params.put("targetLocation", "Utility");
+        params.put("modifier", 10);
+        ChanceCard card = new ChanceCard(Action.AdvanceConditional, "Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total 10 times the amount thrown.", params);
+
+        // Game setup - say player rolled a 10
+        game.getDice().setRollTotal(10);
+
+        // Player Setup
+        playerList.getFirst().setMoney(1000);
+        playerList.getLast().setMoney(1000);
+        // on chance card position
+        playerList.getFirst().updatePosition(22, game.getBoard());
+        // Another player owns Water Works
+        playerList.getLast().addProperty(game.getBoard().getProperty(28), game.getBoard());
+
+        // Test
+        card.applyEffect(playerList.getFirst(), game);
+        // 1. ensure player moves to Water Works
+        assertEquals(28, playerList.getFirst().getLocation());
+        // 2. player should pay out 10x the amount thrown (1000 - 10*10)
+        assertEquals(900, playerList.getFirst().getMoney());
+        // 3. owner should receive out 10x the amount thrown
+        assertEquals(1100, playerList.getLast().getMoney());
+    }
+
+    @Test
+    public void testApplyEffectAdvanceConditionalToUtilityPassGo() {}
+
+    @Test
+    public void testApplyEffectAdvanceConditionalToRailroadNoPassGo() {}
+
+    @Test
+    public void testApplyEffectAdvanceConditionalToRailroadPassGo() {}
 }

@@ -67,13 +67,15 @@ public abstract class Card {
                 // contains targetLocation and modifier
                 String targetType = (String) this.params.get("targetLocation");
                 int multiplier_for_rent = (int) this.params.get("modifier");
-                g.getBoard().getNearestPropertyType(p.getLocation(), targetType).ifPresent(idx -> p.advancePosition(idx, g.getBoard()));
+                g.getBoard().getNearestPropertyType(p.getLocation(), targetType)
+                    .ifPresent(moves_to_next -> p.advancePosition((p.getLocation() + moves_to_next) % 40, g.getBoard()));
                 Property property = g.getBoard().getProperty(p.getLocation());
                 String propertyOwner = property.getOwner();
                 if (!propertyOwner.isEmpty() && !propertyOwner.equals(p.getNameNoColor())) {
-                    int rent = property.getRent() * multiplier_for_rent;
+                    // Logic - right now utility is always returning 4x. We should take base and then 10x it
+                    int rent = (property.getRent(g.getDice().getRollTotal()) / 4) * multiplier_for_rent;
                     Player otherPlayer = g.getPlayerList().stream()
-                            .filter(player -> player.getNameNoColor().equals(p.getNameNoColor()))
+                            .filter(player -> player.getNameNoColor().equals(propertyOwner))
                             .findFirst()
                             .orElse(null);
                     if (otherPlayer != null) {
