@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import gameset.functionality.Game;
 import gameset.functionality.Player;
+import gameset.functionality.Property;
 import gameutils.Ansi;
 
 import java.util.ArrayList;
@@ -65,10 +66,22 @@ public abstract class Card {
             case AdvanceConditional -> {
                 // contains targetLocation and modifier
                 String targetType = (String) this.params.get("targetLocation");
-                // TODO: figure out how to do this
-                g.getBoard().getNearestPropertyType(p.getLocation(), targetType).ifPresent(idx -> p.advancePosition(idx, g.getBoard()));
                 int multiplier_for_rent = (int) this.params.get("modifier");
-                System.out.println("TODO: implement chance card - AdvanceConditional");
+                g.getBoard().getNearestPropertyType(p.getLocation(), targetType).ifPresent(idx -> p.advancePosition(idx, g.getBoard()));
+                Property property = g.getBoard().getProperty(p.getLocation());
+                String propertyOwner = property.getOwner();
+                if (!propertyOwner.isEmpty() && !propertyOwner.equals(p.getNameNoColor())) {
+                    int rent = property.getRent() * multiplier_for_rent;
+                    Player otherPlayer = g.getPlayerList().stream()
+                            .filter(player -> player.getNameNoColor().equals(p.getNameNoColor()))
+                            .findFirst()
+                            .orElse(null);
+                    if (otherPlayer != null) {
+                        p.addMoney(-rent);
+                        otherPlayer.addMoney(rent);
+                    }
+                }
+                System.out.println(g.getBoard());
             }
             case DirectMove -> {
                 // 2 possible params: "targetLocation" and "modifier"
