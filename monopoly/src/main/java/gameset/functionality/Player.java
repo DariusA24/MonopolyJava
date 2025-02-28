@@ -145,8 +145,35 @@ public class Player {
         this.inJail = false;
     }
 
-    public void updatePosition(int newPosition) {
+    /**
+     * Updates the position of a player directly on a board (think go directly to jail, do not pass go etc.)
+     * This is utilized by Chance/Community cards in certain scenarios. All other methods should use advancePosition
+     * which takes into account passing go.
+     * <p>
+     * This method has a side effect of updating the board.
+     *
+     * @param newPosition the new position of the player
+     * @param board the board
+    */
+    public void updatePosition(int newPosition, Board board) {
         this.location = newPosition;
+        board.setPlayerPosition(this);
+    }
+
+    /**
+     * Advances the player position on the board.
+     * <p>
+     * This method has a side effect of updating the board.
+     *
+     * @param newPosition the new position of the player
+     * @param board the board
+     */
+    public void advancePosition(int newPosition, Board board) {
+        if (this.location > newPosition || newPosition == 0) {
+            // I must passed Go to get to new position
+            board.passedGo(this);
+        }
+        this.updatePosition(newPosition, board);
     }
 
     public boolean checkBalance(int cost) {

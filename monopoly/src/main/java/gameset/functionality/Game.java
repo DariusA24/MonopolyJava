@@ -18,6 +18,15 @@ public class Game {
     private GameScreen gameScreen = new GameScreen();
     private BuildingScreen buildingScreen = new BuildingScreen();
     private GameInitializer gameInitializer = new GameInitializer();
+    private Board board;
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 
     public ArrayList<Player> getPlayerList() {
         return playerList;
@@ -73,7 +82,7 @@ public class Game {
      * @param property
      * @param player
      */
-    private void purchaseProperty(Property property, Player player, Board board) throws IOException {
+    private void purchaseProperty(Property property, Player player) throws IOException {
         System.out.println("Your balance is: " + Ansi.ANSI_GREEN + player.getMoney() + Ansi.ANSI_RESET);
         System.out.println("Press P to purchase: ");
         System.out.println("Press F to skip: ");
@@ -106,14 +115,14 @@ public class Game {
      * @param property
      * @param player
      */
-    private void viewProperty(Property property, Player player, Board board) throws IOException {
+    private void viewProperty(Property property, Player player) throws IOException {
         if (property.getOwner().isEmpty()) {
             System.out.println("Property is not owned");
             System.out.println("Press E to view details about the property");
             String input = userInput.next();
             if (input.equals("E") || input.equals("e")) {
                 System.out.println(property);
-                purchaseProperty(property, player, board);
+                purchaseProperty(property, player);
 
             }
         } else {
@@ -126,19 +135,17 @@ public class Game {
     }
 
     /**
-     * TODO I would like to have less parameters being passed through this.
      *
      * @param landingSpot
      * @param player
-     * @param board
      */
-    private void handlePlayerLanding(int landingSpot, Player player, Board board) throws IOException {
+    private void handlePlayerLanding(int landingSpot, Player player) throws IOException {
         Property property = board.getProperty(landingSpot);
         System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Landed on " + property.displayPropertyName());
         System.out.println("---------------");
         String propertyType = property.getType();
         switch (propertyType) {
-            case "property" -> viewProperty(board.getGameBoard().get(landingSpot), player, board);
+            case "property" -> viewProperty(property, player);
             case "railroad" -> System.out.println("Landed on a railroad");
             case "tax" -> System.out.println("Landed on tax");
             case "card" -> {
@@ -200,7 +207,7 @@ public class Game {
      * @param player
      * @return where the player landed on the board
      */
-    private int getLandingSpot(Player player, Board board) {
+    private int getLandingSpot(Player player) {
         int roll = dice.rollDice(player);
         rollAgain = dice.isDoubles();
         int landingSpot = player.getLocation() + roll;
@@ -226,22 +233,19 @@ public class Game {
 
 
     /**
-     * TODO: Look into not having to pass the entire board into the function
      *
      * @param player
-     * @param board
      */
-    private void playerTurn(Player player, Board board) throws IOException {
+    private void playerTurn(Player player) throws IOException {
         // TODO: We can add check if bankrupt here to handle mortgages first
         // Then we can fall into the if/else logic
         if (player.getJailStatus()) {
             handlePlayerInJail(player);
         } else {
-            int landingSpot = getLandingSpot(player, board);
-            player.updatePosition(landingSpot);
-            board.setPlayerPosition(player);
+            int landingSpot = getLandingSpot(player);
+            player.updatePosition(landingSpot, board);
             System.out.println(board);
-            handlePlayerLanding(landingSpot, player, board);
+            handlePlayerLanding(landingSpot, player);
         }
         String choice = gameScreen.turnMenu(userInput);
         while (!choice.equals("1")) {
@@ -273,7 +277,7 @@ public class Game {
         int turnTrack = 0;
         playerList = gameInitializer.setPlayers(playerAmount);
         listPlayers();
-        Board board = new Board(playerList);
+        this.setBoard(new Board(playerList));
         System.out.println(board);
         System.out.println(Ansi.ANSI_BLUE + "********** GAME IS STARTING **********" + Ansi.ANSI_RESET);
 
@@ -281,11 +285,11 @@ public class Game {
         while (playGame) {
             Player player = playerList.get(turnTrack);
             System.out.println(Ansi.ANSI_WHITE + "**********" + player.getName().toUpperCase() + " TURN" + "**********" + Ansi.ANSI_WHITE);
-            playerTurn(player, board);
+            playerTurn(player);
 
             while (rollAgain) {
                 System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Rolled Doubles. It is your turn again.");
-                playerTurn(player, board);
+                playerTurn(player);
             }
             if (playerList.size() <= 1) {
                 playGame = false;

@@ -10,7 +10,7 @@
     "description": "Advance to Illinois Ave. If you pass Go, collect $200.",
     "action": "Advance",
     "params": {
-      "targetLocation": "Illinois Ave"  
+      "targetLocation": "Illinois Ave."
     }
   },
   {
@@ -24,7 +24,7 @@
     "description": "Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total 10 times the amount thrown.",
     "action": "AdvanceConditional",
     "params": {
-      "targetLocation": "Nearest Utility",
+      "targetLocation": "Utility",
       "modifier": 10
     }
   },
@@ -32,7 +32,7 @@
     "description": "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rent to which they are otherwise entitled.",
     "action": "AdvanceConditional",
     "params": {
-      "targetLocation": "Nearest Railroad",
+      "targetLocation": "Railroad",
       "modifier": 2
     }
   },

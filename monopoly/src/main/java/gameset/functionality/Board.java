@@ -7,6 +7,7 @@ import gameutils.ResourceParser;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.OptionalInt;
 
 public class Board {
     private final HashMap<String, Integer> playerPositions = new HashMap<>();
@@ -41,6 +42,45 @@ public class Board {
 
     public Property getProperty(int location) {
         return this.gameBoard.get(location);
+    }
+
+    /**
+     * Gets the position of the property with the given name on the board.
+     *
+     * @param propertyName The name of the property to search for.
+     * @return The position of the property, or an empty Optional if it is not found.
+     */
+    public OptionalInt getPropertyPosition(String propertyName) {
+        return this.gameBoard.stream()
+                .filter(property -> property.getName().equals(propertyName))
+                .mapToInt(gameBoard::indexOf)
+                .findFirst();
+    }
+
+    /**
+     * Returns the index of the next nearest property of a specific type (railroad, utility, property).
+     *
+     * @param location the starting location
+     * @param type the type of property
+     * @return The index of the closest property
+     */
+    public int getNearestPropertyType(int location, String type) {
+        ArrayList<Integer> prop_type_idx = (ArrayList<Integer>) gameBoard.stream()
+                .filter(p -> p.getType().equals(type.toLowerCase()))
+                .map(gameBoard::indexOf)
+                .toList();
+        // TODO: this is a bug - I need to advance to nearest, not find the closest
+        int idx_of_closest_prop_type = prop_type_idx.getFirst();
+        int min_dist = Math.abs(idx_of_closest_prop_type - location);
+
+        for (int i = 1; i < prop_type_idx.size(); i++) {
+            int dist = Math.abs(prop_type_idx.get(i) - location);
+            if (dist < min_dist) {
+                idx_of_closest_prop_type = prop_type_idx.get(i);
+                min_dist = dist;
+            }
+        }
+        return idx_of_closest_prop_type;
     }
 
     public Deck<ChanceCard> getChanceCards() {

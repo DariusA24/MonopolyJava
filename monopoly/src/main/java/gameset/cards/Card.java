@@ -42,7 +42,7 @@ public abstract class Card {
     }
 
 
-    // TODO: GH issues #30, #31 (Implement chance card effects)
+    // TODO: GH issue: #31 (Implement chance card effects)
     /**
      * Applies the effect of this card to the player and the game.
      *
@@ -56,13 +56,32 @@ public abstract class Card {
     public void applyEffect(Player p, Game g) {
         switch (this.action) {
             case Advance -> {
-                System.out.println("TODO: implement chance card - Advance");
+                if (this.params.containsKey("targetLocation")) {
+                    String targetLocation = (String) this.params.get("targetLocation");
+                    g.getBoard().getPropertyPosition(targetLocation).ifPresent(idx -> p.advancePosition(idx, g.getBoard()));
+                }
+                System.out.println(g.getBoard());
             }
             case AdvanceConditional -> {
+                // contains targetLocation and modifier
+                String targetLocation = (String) this.params.get("targetLocation");
+                // TODO: figure out how to do this
+                int multiplier_for_rent = (int) this.params.get("modifier");
+                g.getBoard().getPropertyPosition(targetLocation).ifPresent(idx -> p.advancePosition(idx, g.getBoard()));
                 System.out.println("TODO: implement chance card - AdvanceConditional");
             }
             case DirectMove -> {
-                System.out.println("TODO: implement chance card - DirectMove");
+                // 2 possible params: "targetLocation" and "modifier"
+                if (this.params.containsKey("targetLocation")) {
+                    String targetLocation = (String) this.params.get("targetLocation");
+                    g.getBoard().getPropertyPosition(targetLocation).ifPresent(idx -> p.updatePosition(idx, g.getBoard()));
+                }
+                if (this.params.containsKey("modifier")) {
+                    int modifier = (int) this.params.get("modifier");
+                    int targetLocation = p.getLocation() + modifier;
+                    p.updatePosition(targetLocation, g.getBoard());
+                }
+                System.out.println(g.getBoard());
             }
             case MoneyReceive -> {
                 int amount = (int) this.params.get("value");
