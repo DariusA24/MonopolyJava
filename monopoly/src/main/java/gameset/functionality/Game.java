@@ -60,8 +60,11 @@ public class Game {
                 property.buildBuilding();
                 System.out.println("You purchased your " + property.getNumHouses() + " houses of " + property.displayPropertyName());
             }
+            else if (player.getMoney() - cost < 0) {
+                System.out.println("Unable to purchase due to insufficient funds");
+            }
             else {
-                System.out.println("Unable to purchase building due to insufficient funds");
+                System.out.println("Unable to purchase buildings when property is mortgaged.");
             }
         }
         else {

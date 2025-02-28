@@ -30,6 +30,7 @@ public class Property {
     private String color;
     @JsonProperty("mortgage")
     private Integer mortgage;
+    private boolean isMortgaged;
 
     private Integer numHouses = 0;
     private boolean hasHotel;
@@ -82,6 +83,9 @@ public class Property {
     public String getOwner() {
         return owner;
     }
+    public boolean isMortgaged() {
+        return isMortgaged;
+    }
 
     //Setters
     public void setOwner(String owner) {
@@ -90,6 +94,10 @@ public class Property {
 
     public void setRent(Integer rent) {
         this.rent = rentWithBuildingsList.get(numHouses);
+    }
+
+    public void setMortgaged(boolean mortgaged) {
+        this.isMortgaged = mortgaged;
     }
 
     @Override
