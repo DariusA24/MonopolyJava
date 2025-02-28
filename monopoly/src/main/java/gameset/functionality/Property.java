@@ -79,6 +79,9 @@ public class Property {
         if (type.equalsIgnoreCase("utility")) {
             // TODO: known bug here, if player has monopoly, then rent is 10x not 4x
             return 4 * previousRoll;
+        } else if (type.equalsIgnoreCase("railroad")) {
+            // TODO: known bug here, if player has more than 1 railroad, then rent is different
+            return 25;
         } else {
             return rentWithBuildingsList.get(numHouses);
         }

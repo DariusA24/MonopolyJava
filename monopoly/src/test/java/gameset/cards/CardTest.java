@@ -206,11 +206,167 @@ public class CardTest {
     }
 
     @Test
-    public void testApplyEffectAdvanceConditionalToUtilityPassGo() {}
+    public void testApplyEffectAdvanceConditionalToUtilityPassGo() {
+        // Card Setup
+        params.put("targetLocation", "Utility");
+        params.put("modifier", 10);
+        ChanceCard card = new ChanceCard(Action.AdvanceConditional, "Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total 10 times the amount thrown.", params);
+
+        // Player Setup - on chance card position
+        playerList.getFirst().updatePosition(38, game.getBoard());
+
+        // Test
+        card.applyEffect(playerList.getFirst(), game);
+        // 1. ensure player moves to Electric Company
+        assertEquals(12, playerList.getFirst().getLocation());
+        // 2. ensure player pay/receive (player passed go + no player owns property)
+        assertEquals(200, playerList.getFirst().getMoney());
+    }
 
     @Test
-    public void testApplyEffectAdvanceConditionalToRailroadNoPassGo() {}
+    public void testApplyEffectAdvanceConditionalToUtilityPassGoOwnedByOther() throws IOException {
+        // Card Setup
+        params.put("targetLocation", "Utility");
+        params.put("modifier", 10);
+        ChanceCard card = new ChanceCard(Action.AdvanceConditional, "Advance token to the nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner a total 10 times the amount thrown.", params);
+
+        // Game setup - say player rolled a 10
+        game.getDice().setRollTotal(10);
+
+        // Player Setup
+        playerList.getFirst().setMoney(1000);
+        playerList.getLast().setMoney(1000);
+        // on chance card position
+        playerList.getFirst().updatePosition(37, game.getBoard());
+        // Another player owns Water Works
+        playerList.getLast().addProperty(game.getBoard().getProperty(12), game.getBoard());
+
+        // Test
+        card.applyEffect(playerList.getFirst(), game);
+        // 1. ensure player moves to Water Works
+        assertEquals(12, playerList.getFirst().getLocation());
+        // 2. player should pay out 10x the amount thrown (1000 + 200 - 10*10)
+        assertEquals(1100, playerList.getFirst().getMoney());
+        // 3. owner should receive out 10x the amount thrown
+        assertEquals(1100, playerList.getLast().getMoney());
+    }
 
     @Test
-    public void testApplyEffectAdvanceConditionalToRailroadPassGo() {}
+    public void testApplyEffectAdvanceConditionalToRailroadNoPassGo() {
+        // Card Setup
+        params.put("targetLocation", "Railroad");
+        params.put("modifier", 2);
+        ChanceCard card = new ChanceCard(Action.AdvanceConditional, "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rent to which they are otherwise entitled.", params);
+
+        // Player Setup - on chance card position
+        playerList.getFirst().updatePosition(31, game.getBoard());
+
+        // Test
+        card.applyEffect(playerList.getFirst(), game);
+        // 1. ensure player moves to Short Line
+        assertEquals(35, playerList.getFirst().getLocation());
+        // 2. ensure player pay/receive (no pass go + no player owns property)
+        assertEquals(0, playerList.getFirst().getMoney());
+    }
+
+    @Test
+    public void testApplyEffectAdvanceConditionalToRailroadNoPassGoOwnedByOther() throws IOException {
+        // Card Setup
+        params.put("targetLocation", "Railroad");
+        params.put("modifier", 2);
+        ChanceCard card = new ChanceCard(Action.AdvanceConditional, "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rent to which they are otherwise entitled.", params);
+
+        // Player Setup
+        playerList.getFirst().setMoney(1000);
+        playerList.getLast().setMoney(1000);
+        // on chance card position
+        playerList.getFirst().updatePosition(22, game.getBoard());
+        // Another player owns B & O Railroad
+        playerList.getLast().addProperty(game.getBoard().getProperty(25), game.getBoard());
+
+        // Test
+        card.applyEffect(playerList.getFirst(), game);
+        // 1. ensure player moves to Water Works
+        assertEquals(25, playerList.getFirst().getLocation());
+        // 2. player should pay out 2x the rent amount (1000 - 2*25) - player owns 1
+        assertEquals(950, playerList.getFirst().getMoney());
+        // 3. owner should receive out 10x the amount thrown
+        assertEquals(1050, playerList.getLast().getMoney());
+    }
+
+    @Test
+    public void testApplyEffectAdvanceConditionalToRailroadPassGo() {
+        // Card Setup
+        params.put("targetLocation", "Railroad");
+        params.put("modifier", 2);
+        ChanceCard card = new ChanceCard(Action.AdvanceConditional, "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rent to which they are otherwise entitled.", params);
+
+        // Player Setup - on chance card position
+        playerList.getFirst().updatePosition(36, game.getBoard());
+
+        // Test
+        card.applyEffect(playerList.getFirst(), game);
+        // 1. ensure player moves to Reading Railroad
+        assertEquals(5, playerList.getFirst().getLocation());
+        // 2. ensure player pay/receive (passed go + no player owns property)
+        assertEquals(200, playerList.getFirst().getMoney());
+    }
+
+    @Test
+    public void testApplyEffectAdvanceConditionalToRailroadPassGoOwnedByOther() throws IOException {
+        // Card Setup
+        params.put("targetLocation", "Railroad");
+        params.put("modifier", 2);
+        ChanceCard card = new ChanceCard(Action.AdvanceConditional, "Advance to the nearest Railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rent to which they are otherwise entitled.", params);
+
+        // Player Setup
+        playerList.getFirst().setMoney(1000);
+        playerList.getLast().setMoney(1000);
+        // on chance card position
+        playerList.getFirst().updatePosition(37, game.getBoard());
+        // Another player owns Reading Railroad
+        playerList.getLast().addProperty(game.getBoard().getProperty(5), game.getBoard());
+
+        // Test
+        card.applyEffect(playerList.getFirst(), game);
+        // 1. ensure player moves to Reading Railroad
+        assertEquals(5, playerList.getFirst().getLocation());
+        // 2. player should pay out 2x the rent amount (1000 + 200 - 2*25)
+        assertEquals(1150, playerList.getFirst().getMoney());
+        // 3. owner should receive out 2x the expected rent amount
+        assertEquals(1050, playerList.getLast().getMoney());
+    }
+
+    @Test
+    public void testApplyEffectDirectMoveJailNoPassGo() {
+        // Card Setup
+        params.put("targetLocation", "Jail");
+        params.put("modifier", 0);
+        CommunityChestCard card = new CommunityChestCard(Action.DirectMove, "Go to Jail. Go directly to Jail. Do not pass GO, do not collect $200.", params);
+
+        // Player Setup - on community chest card position
+        playerList.getFirst().updatePosition(33, game.getBoard());
+
+        // Test
+        card.applyEffect(playerList.getFirst(), game);
+        // 1. ensure player moves to Jail
+        assertEquals(10, playerList.getFirst().getLocation());
+        // 2. ensure player does not receive $200 (because they do not pass go)
+        assertEquals(0, playerList.getFirst().getMoney());
+    }
+
+    @Test
+    public void testApplyEffectDirectMoveBackThreeSpaces() {
+        // Card Setup
+        params.put("modifier", -3);
+        ChanceCard card = new ChanceCard(Action.DirectMove, "Go Back Three Spaces", params);
+
+        // Player Setup - on chance card position
+        playerList.getFirst().updatePosition(22, game.getBoard());
+
+        // Test
+        card.applyEffect(playerList.getFirst(), game);
+        // 1. ensure player moves back 3 spaces
+        assertEquals(19, playerList.getFirst().getLocation());
+    }
 }

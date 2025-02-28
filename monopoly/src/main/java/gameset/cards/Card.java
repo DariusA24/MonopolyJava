@@ -68,12 +68,21 @@ public abstract class Card {
                 String targetType = (String) this.params.get("targetLocation");
                 int multiplier_for_rent = (int) this.params.get("modifier");
                 g.getBoard().getNearestPropertyType(p.getLocation(), targetType)
-                    .ifPresent(moves_to_next -> p.advancePosition((p.getLocation() + moves_to_next) % 40, g.getBoard()));
+                    .ifPresent(moves_to_next -> p.advancePosition(
+                            (p.getLocation() + moves_to_next) % g.getBoard().getGameBoard().size(),
+                            g.getBoard())
+                    );
                 Property property = g.getBoard().getProperty(p.getLocation());
                 String propertyOwner = property.getOwner();
                 if (!propertyOwner.isEmpty() && !propertyOwner.equals(p.getNameNoColor())) {
-                    // Logic - right now utility is always returning 4x. We should take base and then 10x it
-                    int rent = (property.getRent(g.getDice().getRollTotal()) / 4) * multiplier_for_rent;
+                    int rent = 0;
+                    if (targetType.equalsIgnoreCase("railroad")) {
+                        rent = property.getRent(g.getDice().getRollTotal()) * multiplier_for_rent;
+                    }
+                    if (targetType.equalsIgnoreCase("utility")) {
+                        // TODO: known bug here, if player has monopoly, then rent is 10x not 4x so division is wrong
+                        rent = (property.getRent(g.getDice().getRollTotal()) / 4) * multiplier_for_rent;
+                    }
                     Player otherPlayer = g.getPlayerList().stream()
                             .filter(player -> player.getNameNoColor().equals(propertyOwner))
                             .findFirst()

@@ -150,8 +150,7 @@ public class Game {
         System.out.println("---------------");
         String propertyType = property.getType();
         switch (propertyType) {
-            case "utility", "property" -> viewProperty(property, player);
-            case "railroad" -> System.out.println("Landed on a railroad");
+            case "utility", "property", "railroad" -> viewProperty(property, player);
             case "tax" -> System.out.println("Landed on tax");
             case "card" -> {
                 switch (property.getName().toLowerCase()) {

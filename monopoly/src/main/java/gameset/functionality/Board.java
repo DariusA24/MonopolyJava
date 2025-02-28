@@ -28,7 +28,7 @@ public class Board {
     }
 
     public void passedGo(Player player) {
-        player.setMoney(200);
+        player.addMoney(200);
         System.out.println("Player: ");
         player.displayColoredName();
         System.out.println(" Passed Go, Collect: " + Ansi.ANSI_GREEN + " $200 " + Ansi.ANSI_RESET);
