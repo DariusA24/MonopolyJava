@@ -243,7 +243,6 @@ public class Player {
                     break;
                 }
             }
-            // TODO: once card is played, It should be re-added to the deck
         }
     }
 
