@@ -1,6 +1,9 @@
 package gameset.functionality;
 
+import gameset.cards.Action;
 import gameset.cards.Card;
+import gameset.cards.ChanceCard;
+import gameset.cards.CommunityChestCard;
 import gameutils.Ansi;
 
 import java.io.IOException;
@@ -21,7 +24,7 @@ public class Player {
     private int doubleRollCounter;
     public int railRoadCounter;
     // Stores player cards, like get out of jail free
-    private final List<String> inventory = new ArrayList<>();
+    private final List<Card> inventory = new ArrayList<>();
 
     public Player(String name, int money, String color) throws IOException {
         this.name = name;
@@ -217,25 +220,34 @@ public class Player {
         return name;
     }
 
-    public List<String> getInventory() {
+    public List<Card> getInventory() {
         return inventory;
     }
 
-    public void addToInventory(String str) {
-        inventory.add(str);
+    public void addToInventory(Card c) {
+        inventory.add(c);
     }
 
-    public void removeFromInventory(String str, Board b) {
-        switch (str) {
-            case "GetOutOfJailCard" -> {
-                inventory.remove("GetOutOfJailCard");
-                // TODO: once card is played, It should be re-added to the deck
+    public void removeFromInventory(Action action, Board b) {
+        if (action == Action.GetOutOfJailCard) {
+            for (int i = 0; i < inventory.size(); i++) {
+                Card c = inventory.get(i);
+                if (c.getAction() == Action.GetOutOfJailCard) {
+                    inventory.remove(i);
+                    if (c instanceof ChanceCard) {
+                        b.getChanceCards().addToBottom((ChanceCard) c);
+                    }
+                    if (c instanceof CommunityChestCard) {
+                        b.getCommunityChestCards().addToBottom((CommunityChestCard) c);
+                    }
+                    break;
+                }
             }
-            default -> {}
+            // TODO: once card is played, It should be re-added to the deck
         }
     }
 
     public boolean hasGetOutOfJailCard() {
-        return inventory.contains("GetOutOfJailCard");
+        return inventory.stream().anyMatch(c -> c.getAction() == Action.GetOutOfJailCard);
     }
 }

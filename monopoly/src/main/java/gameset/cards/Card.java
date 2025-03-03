@@ -43,6 +43,9 @@ public abstract class Card {
         return Objects.hash(action, description, params);
     }
 
+    public Action getAction() {
+        return action;
+    }
 
     /**
      * Applies the effect of this card to the player and the game.
@@ -176,7 +179,7 @@ public abstract class Card {
             }
             case GetOutOfJailCard -> {
                 // Adds "GetOutOfJailCard" to current player's inventory
-                p.addToInventory(action.toString());
+                p.addToInventory(this);
             }
             case OwnedPropertyPay -> {
                 // Retrieve Owned Property Pays 2 parameters: "housePay" and "hotelPay"

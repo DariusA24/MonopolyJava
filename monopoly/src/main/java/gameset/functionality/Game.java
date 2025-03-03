@@ -1,5 +1,6 @@
 package gameset.functionality;
 
+import gameset.cards.Action;
 import gameset.screens.BuildingScreen;
 import gameset.cards.ChanceCard;
 import gameset.cards.CommunityChestCard;
@@ -211,7 +212,7 @@ public class Game {
                 case 3 -> {
                     player.displayColoredName();
                     System.out.println("Used get out of jail free card to escape jail!");
-                    player.removeFromInventory("GetOutOfJailCard", board);
+                    player.removeFromInventory(Action.GetOutOfJailCard, board);
                     jailChoiceFlag = false;
                     player.leaveJail();
                 }

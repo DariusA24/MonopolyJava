@@ -434,6 +434,6 @@ public class CardTest {
         // Should have inventory of 1
         assertEquals(1, playerList.getFirst().getInventory().size());
         // Should have inventory's first element as GetOutOfJailCard
-        assertEquals("GetOutOfJailCard", playerList.getFirst().getInventory().getFirst());
+        assertEquals(card, playerList.getFirst().getInventory().getFirst());
     }
 }
