@@ -185,4 +185,8 @@ public class Property {
         changeRent();
         System.out.println("Purchased a hotel for: " + displayPropertyName());
     }
+
+    public boolean hasHotel() {
+        return hasHotel;
+    }
 }

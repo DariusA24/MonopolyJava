@@ -369,4 +369,56 @@ public class CardTest {
         // 1. ensure player moves back 3 spaces
         assertEquals(19, playerList.getFirst().getLocation());
     }
+
+    @Test
+    public void testApplyEffectOwnedPropertyPayNoHousesHotels() {
+        // Card Setup
+        params.put("housePay", 25);
+        params.put("hotelPay", 100);
+        ChanceCard card = new ChanceCard(Action.OwnedPropertyPay, "Make general repairs on all your property: For each house pay $25, For each hotel pay $100.", params);
+
+        // Player setup - on chance card position (no properties built on)
+        playerList.getFirst().setMoney(1000);
+        playerList.getFirst().updatePosition(22, game.getBoard());
+
+        // Test
+        card.applyEffect(playerList.getFirst(), game);
+        assertEquals(1000, playerList.getFirst().getMoney());
+    }
+
+    @Test
+    public void testApplyEffectOwnedPropertyPaySomeHousesHotels() throws IOException {
+        // Card Setup
+        params.put("housePay", 40);
+        params.put("hotelPay", 115);
+        CommunityChestCard card = new CommunityChestCard(Action.OwnedPropertyPay, "You are assessed for street repairs: Pay $40 per house and $115 per hotel you own.", params);
+
+        // Player setup - on community chest card position
+        playerList.getFirst().setMoney(1000);
+        playerList.getFirst().updatePosition(2, game.getBoard());
+        // Add Brown properties for player 1 and build some houses + hotels
+        playerList.getFirst().addProperty(
+                game.getBoard().getProperty(1),
+                game.getBoard()
+        );
+        playerList.getFirst().addProperty(
+                game.getBoard().getProperty(3),
+                game.getBoard()
+        );
+        // Build 4 houses
+        for (int i = 0; i < 4; i++) {
+            game.getBoard().getProperty(1).buildBuilding();
+        }
+
+        // Build 1 hotel
+        for (int i = 0; i < 5; i++) {
+            game.getBoard().getProperty(3).buildBuilding();
+        }
+
+
+        // Test
+        card.applyEffect(playerList.getFirst(), game);
+        // 1000 - (40 * 4 + 115)
+        assertEquals(725, playerList.getFirst().getMoney());
+    }
 }

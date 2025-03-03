@@ -179,7 +179,24 @@ public abstract class Card {
                 System.out.println("TODO: implement chance card - GetOutOfJailCard");
             }
             case OwnedPropertyPay -> {
-                System.out.println("TODO: implement chance card - OwnedPropertyPay");
+                // Retrieve Owned Property Pays 2 parameters: "housePay" and "hotelPay"
+                int housePay = (int) this.params.get("housePay");
+                int hotelPay = (int) this.params.get("hotelPay");
+
+                // 1. Determine the number of houses and hotels owned by the player
+                int numHouses = 0;
+                int numHotels = 0;
+                for (Property property : p.getProperties()) {
+                    if (property.hasHotel()) {
+                        numHotels++;
+                    } else {
+                        numHouses += property.getNumHouses();
+                    }
+                }
+                // 2. For each house, pay housePay
+                p.addMoney(-(numHouses * housePay));
+                // 3. For each hotel, pay hotelPay
+                p.addMoney(-(numHotels * hotelPay));
             }
         }
     }
