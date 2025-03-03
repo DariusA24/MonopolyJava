@@ -211,6 +211,7 @@ public class Game {
                 case 3 -> {
                     player.displayColoredName();
                     System.out.println("Used get out of jail free card to escape jail!");
+                    player.removeFromInventory("GetOutOfJailCard", board);
                     jailChoiceFlag = false;
                     player.leaveJail();
                 }

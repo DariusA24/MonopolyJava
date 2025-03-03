@@ -225,6 +225,16 @@ public class Player {
         inventory.add(str);
     }
 
+    public void removeFromInventory(String str, Board b) {
+        switch (str) {
+            case "GetOutOfJailCard" -> {
+                inventory.remove("GetOutOfJailCard");
+                // TODO: once card is played, It should be re-added to the deck
+            }
+            default -> {}
+        }
+    }
+
     public boolean hasGetOutOfJailCard() {
         return inventory.contains("GetOutOfJailCard");
     }
