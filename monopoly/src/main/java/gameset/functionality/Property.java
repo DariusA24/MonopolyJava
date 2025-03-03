@@ -88,12 +88,15 @@ public class Property {
     }
 
     public String printRent() {
-        if (type.equalsIgnoreCase("utility")) {
-            // TODO: known bug here, if player has monopoly, then rent is 10x not 4x
-            return "4 times amount shown on dice";
-        } else {
-            return rentWithBuildingsList.get(numHouses).toString();
-        }
+        return switch (type.toLowerCase()) {
+            case "railroad" ->
+                // TODO: known bug here, if player has more than 1, then rent is different
+                    "25";
+            case "utility" ->
+                // TODO: known bug here, if player has monopoly, then rent is 10x not 4x
+                    "4 times amount shown on dice";
+            default -> rentWithBuildingsList.get(numHouses).toString();
+        };
     }
 
     public String getOwner() {

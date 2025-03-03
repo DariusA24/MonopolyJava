@@ -2,6 +2,7 @@ package gameset.cards;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import gameset.functionality.Board;
 import gameset.functionality.Game;
 import gameset.functionality.Player;
 import gameset.functionality.Property;
@@ -58,31 +59,55 @@ public abstract class Card {
         switch (this.action) {
             case Advance -> {
                 if (this.params.containsKey("targetLocation")) {
+                    // Retrieve Advance only parameter: targetLocation
                     String targetLocation = (String) this.params.get("targetLocation");
-                    g.getBoard().getPropertyPosition(targetLocation).ifPresent(idx -> p.advancePosition(idx, g.getBoard()));
+                    Board board = g.getBoard();
+
+                    // 1. Advance player to target location, if player passes go, collect $200
+                    board.getPropertyPosition(targetLocation).ifPresent(idx -> p.advancePosition(idx, board));
                 }
-                System.out.println(g.getBoard());
             }
             case AdvanceConditional -> {
-                // contains targetLocation and modifier
+                // Retrieve Advance Conditional's 2 parameters: targetLocation and modifier
                 String targetType = (String) this.params.get("targetLocation");
                 int multiplier_for_rent = (int) this.params.get("modifier");
-                g.getBoard().getNearestPropertyType(p.getLocation(), targetType)
+
+                /* Advance Conditional moves the player to the nearest railroad or utility.
+                 *  - targetLocation determines the type of property to advance to (railroad or utility)
+                 *  - modifier determines the multiplier to apply to the original rent if nearest property is owned
+                 *     - 2x for railroad
+                 *     - 10x for utility
+                 */
+                Board board = g.getBoard();
+
+                // 1. Get the nearest railroad or utility from players current board position
+                // 2. Move player to the nearest railroad or utility
+                board.getNearestPropertyType(p.getLocation(), targetType)
                     .ifPresent(moves_to_next -> p.advancePosition(
-                            (p.getLocation() + moves_to_next) % g.getBoard().getGameBoard().size(),
-                            g.getBoard())
+                            (p.getLocation() + moves_to_next) % board.getGameBoard().size(), board)
                     );
-                Property property = g.getBoard().getProperty(p.getLocation());
+
+                // 3. Get the owner of the nearest railroad or utility that current player just advanced to (if any)
+                Property property = board.getProperty(p.getLocation());
                 String propertyOwner = property.getOwner();
+
+                // 4. If property is owned by a different player, pay proper rent with multiplier
                 if (!propertyOwner.isEmpty() && !propertyOwner.equals(p.getNameNoColor())) {
                     int rent = 0;
+                    int standardRent = property.getRent(g.getDice().getRollTotal());
+                    // When new location is railroad, rent is 2x standard rent
                     if (targetType.equalsIgnoreCase("railroad")) {
-                        rent = property.getRent(g.getDice().getRollTotal()) * multiplier_for_rent;
+                        rent = standardRent * multiplier_for_rent;
                     }
+
+                    // When new location is utility, rent is 10x standard rent (dice rolled)
                     if (targetType.equalsIgnoreCase("utility")) {
                         // TODO: known bug here, if player has monopoly, then rent is 10x not 4x so division is wrong
-                        rent = (property.getRent(g.getDice().getRollTotal()) / 4) * multiplier_for_rent;
+                        // Divide by 4 for the moment since standardRent assumes 4x dice roll
+                        rent = (standardRent / 4) * multiplier_for_rent;
                     }
+
+                    // 5. Transfer money from current player to the owner of the nearest railroad or utility
                     Player otherPlayer = g.getPlayerList().stream()
                             .filter(player -> player.getNameNoColor().equals(propertyOwner))
                             .findFirst()
@@ -92,23 +117,27 @@ public abstract class Card {
                         otherPlayer.addMoney(rent);
                     }
                 }
-                System.out.println(g.getBoard());
             }
             case DirectMove -> {
-                // 2 possible params: "targetLocation" and "modifier"
+                Board board = g.getBoard();
+                // Retrieve Direct Move's 2 possible parameters: "targetLocation" and "modifier"
                 if (this.params.containsKey("targetLocation")) {
                     String targetLocation = (String) this.params.get("targetLocation");
-                    g.getBoard().getPropertyPosition(targetLocation).ifPresent(idx -> p.updatePosition(idx, g.getBoard()));
-                    if (targetLocation.equals("Jail")) {
+                    // 1. Move player to directly to target location, Does not pass go
+                    board.getPropertyPosition(targetLocation).ifPresent(idx -> p.updatePosition(idx, board));
+                    // 2. If target location is jail, set player to jail
+                    if (targetLocation.equalsIgnoreCase("jail")) {
                         p.goToJail();
                     }
                 }
+
                 if (this.params.containsKey("modifier")) {
+                    // 1. Move player to directly to target location, Does not pass go
                     int modifier = (int) this.params.get("modifier");
+                    // Modifier is relative to current location (for example, move back 3 spaces)
                     int targetLocation = p.getLocation() + modifier;
-                    p.updatePosition(targetLocation, g.getBoard());
+                    p.updatePosition(targetLocation, board);
                 }
-                System.out.println(g.getBoard());
             }
             case MoneyReceive -> {
                 int amount = (int) this.params.get("value");
