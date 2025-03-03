@@ -177,32 +177,42 @@ public class Game {
     }
 
     private void handlePlayerInJail(Player player) {
-        String choice = gameScreen.jailScreen(userInput);
+        int choice = gameScreen.jailScreen(userInput, player.hasGetOutOfJailCard());
         boolean jailChoiceFlag = true;
         while (jailChoiceFlag)
-            if (choice.equals("1")) {
-                dice.rollDice(player);
-                if (dice.isDoubles()) {
-                    player.displayColoredName();
-                    System.out.println("Rolled doubles and escaped jail!");
-                } else {
-                    player.displayColoredName();
-                    System.out.println("Did not roll doubles and is still in jail.");
-                }
-                jailChoiceFlag = false;
-            } else {
-                if (player.getMoney() - 50 < 0) {
-                    player.displayColoredName();
-                    System.out.println("Current balance: ");
-                    System.out.println(player.getMoney());
-                    System.out.println("Not enough funds to get out of jail. Please roll.");
-                    choice = "1";
-                } else {
-                    player.displayColoredName();
-                    System.out.println("New balance: ");
-                    player.addMoney(-50);
-                    System.out.println(player.getMoney());
+            switch (choice) {
+                case 1 -> {
+                    dice.rollDice(player);
+                    if (dice.isDoubles()) {
+                        player.displayColoredName();
+                        System.out.println("Rolled doubles and escaped jail!");
+                        player.leaveJail();
+                    } else {
+                        player.displayColoredName();
+                        System.out.println("Did not roll doubles and is still in jail.");
+                    }
                     jailChoiceFlag = false;
+                }
+                case 2 -> {
+                    if (player.getMoney() - 50 < 0) {
+                        player.displayColoredName();
+                        System.out.println("Current balance: ");
+                        System.out.println(player.getMoney());
+                        System.out.println("Not enough funds to get out of jail. Please roll.");
+                        choice = 1;
+                    } else {
+                        player.displayColoredName();
+                        System.out.println("New balance: ");
+                        player.addMoney(-50);
+                        System.out.println(player.getMoney());
+                        jailChoiceFlag = false;
+                    }
+                }
+                case 3 -> {
+                    player.displayColoredName();
+                    System.out.println("Used get out of jail free card to escape jail!");
+                    jailChoiceFlag = false;
+                    player.leaveJail();
                 }
             }
     }

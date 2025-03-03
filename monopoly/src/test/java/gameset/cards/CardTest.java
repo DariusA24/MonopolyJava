@@ -421,4 +421,19 @@ public class CardTest {
         // 1000 - (40 * 4 + 115)
         assertEquals(725, playerList.getFirst().getMoney());
     }
+
+    @Test
+    public void testApplyEffectGetOutOfJailCard() {
+        // Card Setup
+        ChanceCard card = new ChanceCard(Action.GetOutOfJailCard, "Get out of Jail Free. This card may be kept until needed, or traded/sold.", params);
+
+        // Test
+        // Should start with empty inventory
+        assertEquals(0, playerList.getFirst().getInventory().size());
+        card.applyEffect(playerList.getFirst(), game);
+        // Should have inventory of 1
+        assertEquals(1, playerList.getFirst().getInventory().size());
+        // Should have inventory's first element as GetOutOfJailCard
+        assertEquals("GetOutOfJailCard", playerList.getFirst().getInventory().getFirst());
+    }
 }

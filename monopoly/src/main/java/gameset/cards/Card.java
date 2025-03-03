@@ -44,7 +44,6 @@ public abstract class Card {
     }
 
 
-    // TODO: GH issue: #31 (Implement chance card effects)
     /**
      * Applies the effect of this card to the player and the game.
      *
@@ -176,7 +175,8 @@ public abstract class Card {
                 System.out.println("Player " + p.getColor() + p.getName() + Ansi.ANSI_RESET + " paid $" + Math.abs(newBalance - startingBalance));
             }
             case GetOutOfJailCard -> {
-                System.out.println("TODO: implement chance card - GetOutOfJailCard");
+                // Adds "GetOutOfJailCard" to current player's inventory
+                p.addToInventory(action.toString());
             }
             case OwnedPropertyPay -> {
                 // Retrieve Owned Property Pays 2 parameters: "housePay" and "hotelPay"

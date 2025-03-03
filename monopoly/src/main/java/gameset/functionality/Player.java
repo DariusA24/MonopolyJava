@@ -1,5 +1,6 @@
 package gameset.functionality;
 
+import gameset.cards.Card;
 import gameutils.Ansi;
 
 import java.io.IOException;
@@ -19,6 +20,8 @@ public class Player {
     private boolean isBankrupt;
     private int doubleRollCounter;
     public int railRoadCounter;
+    // Stores player cards, like get out of jail free
+    private final List<String> inventory = new ArrayList<>();
 
     public Player(String name, int money, String color) throws IOException {
         this.name = name;
@@ -212,5 +215,17 @@ public class Player {
 
     public String getNameNoColor() {
         return name;
+    }
+
+    public List<String> getInventory() {
+        return inventory;
+    }
+
+    public void addToInventory(String str) {
+        inventory.add(str);
+    }
+
+    public boolean hasGetOutOfJailCard() {
+        return inventory.contains("GetOutOfJailCard");
     }
 }
