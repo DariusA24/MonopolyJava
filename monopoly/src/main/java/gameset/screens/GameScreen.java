@@ -20,16 +20,33 @@ public class GameScreen {
         return inputChoice;
     }
 
-    public String jailScreen(Scanner scanner) {
+    public int jailScreen(Scanner scanner, boolean hasGetOutOfJailCard) {
+        int validChoices = 2;
+        String menu = Ansi.ANSI_RED + "You are in jail" + System.lineSeparator() + Ansi.ANSI_RESET +
+                "1. Roll a double to leave jail" + System.lineSeparator() +
+                "2. Pay $50 to leave jail" + System.lineSeparator();
 
-        System.out.println(Ansi.ANSI_RED + "You are in jail \n" + Ansi.ANSI_RESET +
-                "1. Roll a double to leave jail \n" +
-                "2. Pay $50 to leave jail. \n");
-        String inputChoice = scanner.next();
-        while (!inputChoice.equals("1") && !inputChoice.equals("2")){
-            System.out.println("Enter a valid choice");
-            inputChoice = scanner.next();
+        if (hasGetOutOfJailCard) {
+            menu += "3. Use get out of jail free card" + System.lineSeparator();
+            validChoices += 1;
         }
-        return inputChoice;
+
+        System.out.println(menu);
+
+        String inputChoice = scanner.next();
+        int choice;
+        while (true) {
+            try {
+                choice = Integer.parseInt(inputChoice);
+                if (choice >= 1 && choice <= validChoices) {
+                    break;
+                }
+                throw new NumberFormatException("Enter a valid choice");
+            } catch (NumberFormatException e) {
+                System.out.println("Enter a valid choice");
+                inputChoice = scanner.next();
+            }
+        }
+        return choice;
     }
 }

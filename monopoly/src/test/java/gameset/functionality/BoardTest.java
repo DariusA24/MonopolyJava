@@ -10,9 +10,9 @@ import org.mockito.Mock;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.OptionalInt;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
     @Mock
@@ -59,5 +59,25 @@ public class BoardTest {
         board.passedGo(playerMock);
         // Validate player money was updated
         Assertions.assertEquals(200, playerMock.getMoney());
+    }
+
+    @Test
+    public void testGetPropertyPositionGo() {
+        OptionalInt position = board.getPropertyPosition("Go");
+        assertTrue(position.isPresent());
+        assertEquals(0, position.getAsInt());
+    }
+
+    @Test
+    public void testGetPropertyPositionFreeParking() {
+        OptionalInt position = board.getPropertyPosition("Free Parking");
+        assertTrue(position.isPresent());
+        assertEquals(20, position.getAsInt());
+    }
+
+    @Test
+    public void testGetPropertyPositionUnknownProperty() {
+        OptionalInt position = board.getPropertyPosition("Unknown Property");
+        assertFalse(position.isPresent());
     }
 }

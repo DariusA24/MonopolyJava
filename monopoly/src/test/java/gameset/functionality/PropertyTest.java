@@ -1,6 +1,7 @@
 package gameset.functionality;
 
 import gameutils.ResourceParser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -9,6 +10,13 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PropertyTest {
+    Game game;
+    @BeforeEach
+    public void setUp() {
+        game = new Game();
+        game.getDice().setRollTotal(6);
+    }
+
     @Test
     public void testPropertyInitialization() throws IOException {
         // Load the property data from the JSON file
@@ -27,7 +35,7 @@ public class PropertyTest {
         assertEquals(350, property.getPrice());
         assertEquals(175, property.getMortgage());
         assertEquals(35, property.getRentWithBuildingsList().getFirst());
-        assertEquals(35, property.getRent());
+        assertEquals(35, property.getRent(game.getDice().getRollTotal()));
     }
 
     @Test
@@ -43,31 +51,31 @@ public class PropertyTest {
         Property property = properties.getFirst();
 
         //Default Rent
-        assertEquals(35, property.getRent());
+        assertEquals(35, property.getRent(game.getDice().getRollTotal()));
 
         //Rent with 1 property
         property.buildBuilding();
-        assertEquals(175, property.getRent());
+        assertEquals(175, property.getRent(game.getDice().getRollTotal()));
 
         //Rent with 2 properties
         property.buildBuilding();
-        assertEquals(500, property.getRent());
+        assertEquals(500, property.getRent(game.getDice().getRollTotal()));
 
         //Rent with 3 properties
         property.buildBuilding();
-        assertEquals(1100, property.getRent());
+        assertEquals(1100, property.getRent(game.getDice().getRollTotal()));
 
         //Rent with 4 properties
         property.buildBuilding();
-        assertEquals(1300, property.getRent());
+        assertEquals(1300, property.getRent(game.getDice().getRollTotal()));
 
         //Rent with hotel
         property.buildBuilding();
-        assertEquals(1500, property.getRent());
+        assertEquals(1500, property.getRent(game.getDice().getRollTotal()));
 
         //Trying to add another property with hotel
         property.buildBuilding();
-        assertEquals(1500, property.getRent());
+        assertEquals(1500, property.getRent(game.getDice().getRollTotal()));
     }
 
     @Test

@@ -91,7 +91,7 @@
   },
   {
     "name": "Electric Company",
-    "type": "property",
+    "type": "utility",
     "price": 150,
     "color": "",
     "rentWithBuildingsList": [0]
@@ -213,7 +213,7 @@
   },
   {
     "name": "Water Works",
-    "type": "property",
+    "type": "utility",
     "price": 150,
     "color": "",
     "rentWithBuildingsList": [0]

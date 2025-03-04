@@ -1,5 +1,6 @@
 package gameset.functionality;
 
+import gameset.cards.Action;
 import gameset.screens.BuildingScreen;
 import gameset.cards.ChanceCard;
 import gameset.cards.CommunityChestCard;
@@ -18,6 +19,19 @@ public class Game {
     private GameScreen gameScreen = new GameScreen();
     private BuildingScreen buildingScreen = new BuildingScreen();
     private GameInitializer gameInitializer = new GameInitializer();
+    private Board board;
+
+    public Dice getDice() {
+        return dice;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
 
     public ArrayList<Player> getPlayerList() {
         return playerList;
@@ -73,7 +87,7 @@ public class Game {
      * @param property
      * @param player
      */
-    private void purchaseProperty(Property property, Player player, Board board) throws IOException {
+    private void purchaseProperty(Property property, Player player) throws IOException {
         System.out.println("Your balance is: " + Ansi.ANSI_GREEN + player.getMoney() + Ansi.ANSI_RESET);
         System.out.println("Press P to purchase: ");
         System.out.println("Press F to skip: ");
@@ -106,40 +120,38 @@ public class Game {
      * @param property
      * @param player
      */
-    private void viewProperty(Property property, Player player, Board board) throws IOException {
+    private void viewProperty(Property property, Player player) throws IOException {
         if (property.getOwner().isEmpty()) {
             System.out.println("Property is not owned");
             System.out.println("Press E to view details about the property");
             String input = userInput.next();
             if (input.equals("E") || input.equals("e")) {
                 System.out.println(property);
-                purchaseProperty(property, player, board);
+                purchaseProperty(property, player);
 
             }
         } else {
+            int rentDue = property.getRent(this.dice.getRollTotal());
             System.out.println("Property is owned by: " + property.getOwner());
-            System.out.println("Rent is: " + property.getRent());
-            System.out.println("Transaction details: " + player.getMoney() + " - " + property.getRent());
-            player.setMoney(player.getMoney() - property.getRent());
+            System.out.println("Rent is: " + rentDue);
+            System.out.println("Transaction details: " + player.getMoney() + " - " + rentDue);
+            player.setMoney(player.getMoney() - rentDue);
 
         }
     }
 
     /**
-     * TODO I would like to have less parameters being passed through this.
      *
      * @param landingSpot
      * @param player
-     * @param board
      */
-    private void handlePlayerLanding(int landingSpot, Player player, Board board) throws IOException {
+    private void handlePlayerLanding(int landingSpot, Player player) throws IOException {
         Property property = board.getProperty(landingSpot);
         System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Landed on " + property.displayPropertyName());
         System.out.println("---------------");
         String propertyType = property.getType();
         switch (propertyType) {
-            case "property" -> viewProperty(board.getGameBoard().get(landingSpot), player, board);
-            case "railroad" -> System.out.println("Landed on a railroad");
+            case "utility", "property", "railroad" -> viewProperty(property, player);
             case "tax" -> System.out.println("Landed on tax");
             case "card" -> {
                 switch (property.getName().toLowerCase()) {
@@ -166,32 +178,43 @@ public class Game {
     }
 
     private void handlePlayerInJail(Player player) {
-        String choice = gameScreen.jailScreen(userInput);
+        int choice = gameScreen.jailScreen(userInput, player.hasGetOutOfJailCard());
         boolean jailChoiceFlag = true;
         while (jailChoiceFlag)
-            if (choice.equals("1")) {
-                dice.rollDice(player);
-                if (dice.isDoubles()) {
-                    player.displayColoredName();
-                    System.out.println("Rolled doubles and escaped jail!");
-                } else {
-                    player.displayColoredName();
-                    System.out.println("Did not roll doubles and is still in jail.");
-                }
-                jailChoiceFlag = false;
-            } else {
-                if (player.getMoney() - 50 < 0) {
-                    player.displayColoredName();
-                    System.out.println("Current balance: ");
-                    System.out.println(player.getMoney());
-                    System.out.println("Not enough funds to get out of jail. Please roll.");
-                    choice = "1";
-                } else {
-                    player.displayColoredName();
-                    System.out.println("New balance: ");
-                    player.addMoney(-50);
-                    System.out.println(player.getMoney());
+            switch (choice) {
+                case 1 -> {
+                    dice.rollDice(player);
+                    if (dice.isDoubles()) {
+                        player.displayColoredName();
+                        System.out.println("Rolled doubles and escaped jail!");
+                        player.leaveJail();
+                    } else {
+                        player.displayColoredName();
+                        System.out.println("Did not roll doubles and is still in jail.");
+                    }
                     jailChoiceFlag = false;
+                }
+                case 2 -> {
+                    if (player.getMoney() - 50 < 0) {
+                        player.displayColoredName();
+                        System.out.println("Current balance: ");
+                        System.out.println(player.getMoney());
+                        System.out.println("Not enough funds to get out of jail. Please roll.");
+                        choice = 1;
+                    } else {
+                        player.displayColoredName();
+                        System.out.println("New balance: ");
+                        player.addMoney(-50);
+                        System.out.println(player.getMoney());
+                        jailChoiceFlag = false;
+                    }
+                }
+                case 3 -> {
+                    player.displayColoredName();
+                    System.out.println("Used get out of jail free card to escape jail!");
+                    player.removeFromInventory(Action.GetOutOfJailCard, board);
+                    jailChoiceFlag = false;
+                    player.leaveJail();
                 }
             }
     }
@@ -200,7 +223,7 @@ public class Game {
      * @param player
      * @return where the player landed on the board
      */
-    private int getLandingSpot(Player player, Board board) {
+    private int getLandingSpot(Player player) {
         int roll = dice.rollDice(player);
         rollAgain = dice.isDoubles();
         int landingSpot = player.getLocation() + roll;
@@ -226,27 +249,24 @@ public class Game {
 
 
     /**
-     * TODO: Look into not having to pass the entire board into the function
      *
      * @param player
-     * @param board
      */
-    private void playerTurn(Player player, Board board) throws IOException {
+    private void playerTurn(Player player) throws IOException {
         // TODO: We can add check if bankrupt here to handle mortgages first
         // Then we can fall into the if/else logic
         if (player.getJailStatus()) {
             handlePlayerInJail(player);
         } else {
-            int landingSpot = getLandingSpot(player, board);
-            player.updatePosition(landingSpot);
-            board.setPlayerPosition(player);
+            int landingSpot = getLandingSpot(player);
+            player.updatePosition(landingSpot, board);
             System.out.println(board);
-            handlePlayerLanding(landingSpot, player, board);
+            handlePlayerLanding(landingSpot, player);
         }
         String choice = gameScreen.turnMenu(userInput);
         while (!choice.equals("1")) {
             if (choice.equals("2")) {
-                player.displayProperties(board);
+                player.displayProperties(this);
                 if (!player.getProperties().isEmpty()) {
                     int purchasedBuilding = buildingScreen.displayPropertyScreen(player, userInput);
                     if (purchasedBuilding != 0) {
@@ -273,7 +293,7 @@ public class Game {
         int turnTrack = 0;
         playerList = gameInitializer.setPlayers(playerAmount);
         listPlayers();
-        Board board = new Board(playerList);
+        this.setBoard(new Board(playerList));
         System.out.println(board);
         System.out.println(Ansi.ANSI_BLUE + "********** GAME IS STARTING **********" + Ansi.ANSI_RESET);
 
@@ -281,11 +301,11 @@ public class Game {
         while (playGame) {
             Player player = playerList.get(turnTrack);
             System.out.println(Ansi.ANSI_WHITE + "**********" + player.getName().toUpperCase() + " TURN" + "**********" + Ansi.ANSI_WHITE);
-            playerTurn(player, board);
+            playerTurn(player);
 
             while (rollAgain) {
                 System.out.println(player.getColor() + player.getName() + Ansi.ANSI_RESET + " Rolled Doubles. It is your turn again.");
-                playerTurn(player, board);
+                playerTurn(player);
             }
             if (playerList.size() <= 1) {
                 playGame = false;

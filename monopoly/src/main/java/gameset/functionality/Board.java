@@ -5,8 +5,7 @@ import gameset.cards.CommunityChestCard;
 import gameutils.Ansi;
 import gameutils.ResourceParser;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class Board {
     private final HashMap<String, Integer> playerPositions = new HashMap<>();
@@ -29,7 +28,7 @@ public class Board {
     }
 
     public void passedGo(Player player) {
-        player.setMoney(200);
+        player.addMoney(200);
         System.out.println("Player: ");
         player.displayColoredName();
         System.out.println(" Passed Go, Collect: " + Ansi.ANSI_GREEN + " $200 " + Ansi.ANSI_RESET);
@@ -41,6 +40,36 @@ public class Board {
 
     public Property getProperty(int location) {
         return this.gameBoard.get(location);
+    }
+
+    /**
+     * Gets the position of the property with the given name on the board.
+     *
+     * @param propertyName The name of the property to search for.
+     * @return The position of the property, or an empty Optional if it is not found.
+     */
+    public OptionalInt getPropertyPosition(String propertyName) {
+        return this.gameBoard.stream()
+                .filter(property -> property.getName().equals(propertyName))
+                .mapToInt(gameBoard::indexOf)
+                .findFirst();
+    }
+
+    /**
+     * Returns the index of the next nearest property of a specific type (railroad, utility, property).
+     *
+     * @param location the starting location
+     * @param type the type of property
+     * @return The index of the closest property
+     */
+    public Optional<Integer> getNearestPropertyType(int location, String type) {
+        return gameBoard.stream()
+                .filter(p -> p.getType().equalsIgnoreCase(type))
+                .map(gameBoard::indexOf)
+                .sorted()
+                // 39 -> 12 (-39), 38 -> 39 (1),
+                .map(p -> p - location < 0 ? p - location + 40 : p - location)
+                .min(Integer::compare);
     }
 
     public Deck<ChanceCard> getChanceCards() {

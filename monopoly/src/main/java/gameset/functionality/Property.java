@@ -75,8 +75,28 @@ public class Property {
         return numHouses;
     }
 
-    public Integer getRent() {
-        return rentWithBuildingsList.get(numHouses);
+    public Integer getRent(int previousRoll) {
+        if (type.equalsIgnoreCase("utility")) {
+            // TODO: known bug here, if player has monopoly, then rent is 10x not 4x
+            return 4 * previousRoll;
+        } else if (type.equalsIgnoreCase("railroad")) {
+            // TODO: known bug here, if player has more than 1 railroad, then rent is different
+            return 25;
+        } else {
+            return rentWithBuildingsList.get(numHouses);
+        }
+    }
+
+    public String printRent() {
+        return switch (type.toLowerCase()) {
+            case "railroad" ->
+                // TODO: known bug here, if player has more than 1, then rent is different
+                    "25";
+            case "utility" ->
+                // TODO: known bug here, if player has monopoly, then rent is 10x not 4x
+                    "4 times amount shown on dice";
+            default -> rentWithBuildingsList.get(numHouses).toString();
+        };
     }
 
     public String getOwner() {
@@ -100,7 +120,7 @@ public class Property {
                 System.lineSeparator() +
                 "Price: " + this.price +
                 System.lineSeparator() +
-                "Rent: " + getRent() +
+                "Rent: " + printRent() +
                 System.lineSeparator() +
                 "Owned: " + this.owner +
                 System.lineSeparator() +
@@ -164,5 +184,9 @@ public class Property {
         numHouses++;
         changeRent();
         System.out.println("Purchased a hotel for: " + displayPropertyName());
+    }
+
+    public boolean hasHotel() {
+        return hasHotel;
     }
 }

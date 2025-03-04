@@ -27,6 +27,7 @@ public class PlayerTest {
         ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
         properties = propertyParser.parseJsonToArrayList(Property.class);
         // Instantiate the Board with the mocked parsers
+        board = new Board(mockedPlayers);
     }
 
     @Test
@@ -56,7 +57,7 @@ public class PlayerTest {
 
     @Test
     public void testUpdateLocation() throws IOException {
-        playerMock.updatePosition(5);
+        playerMock.updatePosition(5, board);
 
         assertEquals(5, playerMock.getLocation());
     }
