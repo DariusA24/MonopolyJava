@@ -25,7 +25,7 @@ public class PropertyTest {
 
         // Check if properties are loaded correctly
         assertNotNull(properties);
-        assertEquals(2, properties.size());
+        assertEquals(3, properties.size());
 
         Property property = properties.getFirst();
 
@@ -43,10 +43,8 @@ public class PropertyTest {
         // Load the property data from the JSON file
         ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
         ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
-
-        // Check if properties are loaded correctly
-        assertNotNull(properties);
-        assertEquals(2, properties.size());
+        ArrayList<Player> mockedPlayers = new ArrayList<>();
+        Board board = new Board(mockedPlayers);
 
         Property property = properties.getFirst();
 
@@ -54,27 +52,27 @@ public class PropertyTest {
         assertEquals(35, property.getRent(game.getDice().getRollTotal()));
 
         //Rent with 1 property
-        property.buildBuilding();
+        property.buildBuilding(board);
         assertEquals(175, property.getRent(game.getDice().getRollTotal()));
 
         //Rent with 2 properties
-        property.buildBuilding();
+        property.buildBuilding(board);
         assertEquals(500, property.getRent(game.getDice().getRollTotal()));
 
         //Rent with 3 properties
-        property.buildBuilding();
+        property.buildBuilding(board);
         assertEquals(1100, property.getRent(game.getDice().getRollTotal()));
 
         //Rent with 4 properties
-        property.buildBuilding();
+        property.buildBuilding(board);
         assertEquals(1300, property.getRent(game.getDice().getRollTotal()));
 
         //Rent with hotel
-        property.buildBuilding();
+        property.buildBuilding(board);
         assertEquals(1500, property.getRent(game.getDice().getRollTotal()));
 
         //Trying to add another property with hotel
-        property.buildBuilding();
+        property.buildBuilding(board);
         assertEquals(1500, property.getRent(game.getDice().getRollTotal()));
     }
 
@@ -103,5 +101,46 @@ public class PropertyTest {
                 "Owned: Player1\n" +
                 "----------------";
         assertEquals(expectedString, property.toString());
+    }
+
+    @Test
+    public void testIsMortage() throws IOException {
+        // Load the property data from the JSON file
+        ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
+        ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
+        Property property = properties.getFirst();
+        property.setMortgaged(true);
+        assertTrue(property.isMortgaged());
+    }
+
+    @Test
+    public void testBuildHouse_True() throws IOException {
+        // Load the property data from the JSON file
+        ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
+        ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
+        ArrayList<Player> mockedPlayers = new ArrayList<>();
+        Board board = new Board(mockedPlayers);
+
+        Property property = properties.getFirst();
+
+        assertTrue(property.buildBuilding(board));
+    }
+
+    @Test
+    public void testBuildHotel_True() throws IOException {
+        // Load the property data from the JSON file
+        ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
+        ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
+        ArrayList<Player> mockedPlayers = new ArrayList<>();
+        Board board = new Board(mockedPlayers);
+
+        Property property = properties.getFirst();
+
+        assertFalse(property.hasHotel());
+
+        for (int i = 0; i <= 4; i++){
+            property.buildBuilding(board);
+        }
+        assertTrue(property.hasHotel());
     }
 }

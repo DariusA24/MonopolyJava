@@ -85,17 +85,30 @@ public class PlayerTest {
     }
 
     @Test
-    public void testCanPurchaseBuilding() throws IOException {
+    public void testCanPurchaseBuilding_True() throws IOException {
         // Load the property data from the JSON file
         ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
         ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
         board = new Board(mockedPlayers);
         playerMock.addProperty(properties.getFirst(), board);
         playerMock.addProperty(properties.get(1), board);
+       assertTrue(playerMock.canPurchaseBuilding(properties.getFirst(), board));
+    }
 
+    @Test
+    public void testCanPurchaseBuildingFalseNoColorSet() throws IOException {
+        // Load the property data from the JSON file
+        ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
+        ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
+        board = new Board(mockedPlayers);
+        playerMock.addProperty(properties.getFirst(), board);
+        playerMock.addProperty(properties.get(1), board);
+        assertFalse(playerMock.canPurchaseBuilding(properties.get(2), board));
+    }
 
-       assertTrue(playerMock.canPurchaseBuilding("blue"));
-       assertFalse(playerMock.canPurchaseBuilding("red"));
+    //TODO
+    @Test
+    public void testCanPurchaseBuilding_False_Not_Even_Across_Properties() throws IOException {
     }
 
     @Test

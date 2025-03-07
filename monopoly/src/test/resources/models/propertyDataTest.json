@@ -13,5 +13,13 @@
     "color": "blue",
     "rentWithBuildingsList": [50, 250, 700, 1500, 1850, 2200],
     "mortgage": 200
+  },
+  {
+    "name": "Kentucky Ave.",
+    "type": "property",
+    "price": 220,
+    "color": "red",
+    "rentWithBuildingsList": [18, 90, 250, 700, 875, 1050],
+    "mortgage": 110
   }
 ]

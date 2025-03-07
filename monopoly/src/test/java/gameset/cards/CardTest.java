@@ -407,12 +407,12 @@ public class CardTest {
         );
         // Build 4 houses
         for (int i = 0; i < 4; i++) {
-            game.getBoard().getProperty(1).buildBuilding();
+            game.getBoard().getProperty(1).buildBuilding(game.getBoard());
         }
 
         // Build 1 hotel
         for (int i = 0; i < 5; i++) {
-            game.getBoard().getProperty(3).buildBuilding();
+            game.getBoard().getProperty(3).buildBuilding(game.getBoard());
         }
 
 

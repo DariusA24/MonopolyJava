@@ -80,4 +80,79 @@ public class BoardTest {
         OptionalInt position = board.getPropertyPosition("Unknown Property");
         assertFalse(position.isPresent());
     }
+
+    @Test
+    public void testBuildingCountersHouseBuilt_Increased() {
+        assertTrue(board.adjustBuildingCounters("house", true));
+        assertEquals(1, board.getHouseCount());
+    }
+
+    @Test
+    public void testBuildingCountersHotelBuilt_Increased() {
+        assertTrue(board.adjustBuildingCounters("hotel", true));
+        assertEquals(1, board.getHotelCount());
+    }
+
+    @Test
+    public void testBuildingCountersHouseBuilt_Max_Increased() {
+        for (int i = 0; i < 32; i++) {
+            board.adjustBuildingCounters("house", true);
+        }
+        assertFalse(board.adjustBuildingCounters("house", true));
+        assertEquals(32, board.getHouseCount());
+    }
+
+    @Test
+    public void testBuildingCountersHotelBuilt_Max_Increased() {
+        for (int i = 0; i < 12; i++) {
+            board.adjustBuildingCounters("hotel", true);
+        }
+        assertFalse(board.adjustBuildingCounters("hotel", true));
+        assertEquals(12, board.getHotelCount());
+    }
+
+    @Test
+    public void testBuildingCountersHouseSold() {
+        assertTrue(board.adjustBuildingCounters("house", false));
+        assertEquals(0, board.getHouseCount());
+
+        assertTrue(board.adjustBuildingCounters("house", true));
+        assertEquals(1, board.getHouseCount());
+
+        assertTrue(board.adjustBuildingCounters("house", false));
+        assertEquals(0, board.getHouseCount());
+    }
+
+    @Test
+    public void testBuildingCountersHotelSold() {
+        assertTrue(board.adjustBuildingCounters("hotel", false));
+        assertEquals(0, board.getHotelCount());
+
+        assertTrue(board.adjustBuildingCounters("hotel", true));
+        assertEquals(1, board.getHotelCount());
+
+        assertTrue(board.adjustBuildingCounters("hotel", false));
+        assertEquals(0, board.getHotelCount());
+    }
+
+    @Test
+    public void testEvenlyBuildingAcrossGroupEmpty() throws IOException {
+        // Load the property data from the JSON file
+        ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
+        ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
+        ArrayList<String> list = new ArrayList<>();
+        assertEquals(list,board.evenlyBuildingAcrossGroup(properties.getFirst()));
+    }
+
+    @Test
+    public void testEvenlyBuildingAcrossGroupNotEmpty() throws IOException {
+        // Load the property data from the JSON file
+        ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
+        ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
+        ArrayList<String> list = new ArrayList<>();
+        list.add(properties.get(1).getName());
+        Property p = properties.getFirst();
+        p.buildBuilding(board);
+        assertEquals(list,board.evenlyBuildingAcrossGroup(p));
+    }
 }

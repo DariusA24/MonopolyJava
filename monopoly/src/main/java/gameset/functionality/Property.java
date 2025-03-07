@@ -34,6 +34,7 @@ public class Property {
     private Integer numHouses = 0;
     private boolean hasHotel;
     private Integer rent;
+    private boolean isMortgaged;
 
 
     // Constants
@@ -103,6 +104,10 @@ public class Property {
         return owner;
     }
 
+    public boolean isMortgaged() {
+        return isMortgaged;
+    }
+
     //Setters
     public void setOwner(String owner) {
         this.owner = owner;
@@ -111,6 +116,11 @@ public class Property {
     public void setRent(Integer rent) {
         this.rent = rentWithBuildingsList.get(numHouses);
     }
+
+    public void setMortgaged(boolean mortgaged) {
+        this.isMortgaged = mortgaged;
+    }
+
 
     @Override
     public String toString() {
@@ -163,14 +173,29 @@ public class Property {
         rent = rentWithBuildingsList.get(numHouses);
     }
 
-    public void buildBuilding() {
+    private void upgradeToHotelAdjuster(Board board) {
+        for (int i = 0; i < MAX_HOUSES; i++) {
+            board.adjustBuildingCounters("hotel", false);
+        }
+    }
+
+    public boolean buildBuilding(Board board) {
         if (hasHotel) {
             System.out.println("Unable to purchase anymore buildings on this property.");
+            return false;
         } else if (numHouses == MAX_HOUSES) {
-            addHotel();
+            if (board.adjustBuildingCounters("hotel", true)) {
+                addHotel();
+                upgradeToHotelAdjuster(board);
+                return true;
+            }
         } else {
-            addHouse();
+            if (board.adjustBuildingCounters("house", true)) {
+                addHouse();
+                return true;
+            }
         }
+        return false;
     }
 
     private void addHouse() {

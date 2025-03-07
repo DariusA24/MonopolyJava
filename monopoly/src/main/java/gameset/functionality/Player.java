@@ -103,11 +103,21 @@ public class Player {
      * it will then check the value to the color. If it is true, then that means
      * that they have monopoly.
      *
-     * @param color the property that would be added
+     * @param property The property that the building will be placed on.
+     * @param board The board object
      */
-    public boolean canPurchaseBuilding(String color){
-        if(colorSets.containsKey(color)){
-            return colorSets.get(color);
+    public boolean canPurchaseBuilding(Property property, Board board) throws IOException {
+        if(colorSets.containsKey(property.getColor())){
+            if (colorSets.get(property.getColor())) {
+                ArrayList<String> propertiesToBuildOnFirst = board.evenlyBuildingAcrossGroup(property);
+                if (!propertiesToBuildOnFirst.isEmpty()){
+                    for (String s : propertiesToBuildOnFirst) {
+                        System.out.println("Must build properties on: " + s + " first." + System.lineSeparator());
+                    }
+                    return false;
+                }
+                return true;
+            }
         }
         return false;
     }
@@ -115,6 +125,7 @@ public class Player {
     private long getPropertiesByColor(String color, Board board) throws IOException {
         return board.getPropertiesColorCount(color);
     }
+
 
     /**
      * Checks if player has monopoly.
