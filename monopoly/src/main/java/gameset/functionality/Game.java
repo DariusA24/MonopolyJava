@@ -79,7 +79,7 @@ public class Game {
             return;
         }
 
-        if (player.getMoney() >= cost) {
+        if (cost > player.getMoney()) {
             System.out.println("Unable to purchase building due to insufficient funds.");
             return;
         }
@@ -90,7 +90,7 @@ public class Game {
         }
 
         player.setMoney(player.getMoney() - cost);
-        System.out.println("You purchased " + property.getNumHouses() + " house(s) on " + property.displayPropertyName());
+        System.out.println("You now have " + property.getNumHouses() + " house(s) on " + property.displayPropertyName());
     }
 
     /**
@@ -131,7 +131,7 @@ public class Game {
      * @param player
      */
     private void viewProperty(Property property, Player player) throws IOException {
-        if (property.getOwner() == null) {
+        if (property.getOwner().isEmpty()) {
             System.out.println("Property is not owned");
             System.out.println("Press E to view details about the property");
             String input = userInput.next();
@@ -140,7 +140,7 @@ public class Game {
                 purchaseProperty(property, player);
 
             }
-        } else if (!Objects.equals(property.getOwner(), player)) {
+        } else if (!property.getOwner().equals(player.getName())) {
             int rentDue = property.getRent(this.dice.getRollTotal());
             System.out.println("Property is owned by: " + property.getOwner());
             System.out.println("Rent is: " + rentDue);

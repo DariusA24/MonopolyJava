@@ -121,4 +121,40 @@ public class PlayerTest {
 
         assertTrue(playerMock.isBankrupt());
     }
+
+    @Test
+    public void sellBuilding_House() throws IOException {
+        ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
+        ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
+        board = new Board(mockedPlayers);
+        playerMock.addProperty(properties.getFirst(), board);
+        playerMock.addProperty(properties.get(1), board);
+
+        Property p = properties.getFirst();
+        assertEquals(1500, playerMock.getMoney());
+        p.buildBuilding(board);
+        playerMock.sellBuilding(p, board);
+        assertEquals(1600, playerMock.getMoney());
+    }
+
+    @Test
+    public void sellBuilding_Hotel() throws IOException {
+        ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
+        ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
+        board = new Board(mockedPlayers);
+        playerMock.addProperty(properties.getFirst(), board);
+        playerMock.addProperty(properties.get(1), board);
+
+        Property p = properties.getFirst();
+        assertEquals(1500, playerMock.getMoney());
+
+        for (int i = 0; i <= 4; i++){
+            p.buildBuilding(board);
+        }
+
+        playerMock.sellBuilding(p, board);
+        assertEquals(1600, playerMock.getMoney());
+    }
+
+
 }

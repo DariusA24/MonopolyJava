@@ -143,4 +143,46 @@ public class PropertyTest {
         }
         assertTrue(property.hasHotel());
     }
+
+    @Test
+    public void testRemoveBuilding_House() throws IOException {
+        ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
+        ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
+        Property property = properties.getFirst();
+        ArrayList<Player> mockedPlayers = new ArrayList<>();
+        Board board = new Board(mockedPlayers);
+
+        property.buildBuilding(board);
+        assertEquals(1, property.getNumHouses());
+        assertEquals(1, board.getHouseCount());
+
+        property.removeBuilding(board);
+        assertEquals(0, property.getNumHouses());
+        assertEquals(0, board.getHouseCount());
+    }
+
+    @Test
+    public void testRemoveBuilding_Hotel() throws IOException {
+        ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
+        ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
+        Property property = properties.getFirst();
+        ArrayList<Player> mockedPlayers = new ArrayList<>();
+        Board board = new Board(mockedPlayers);
+
+        assertFalse(property.hasHotel());
+        assertEquals(0, board.getHotelCount());
+        for (int i = 0; i <= 4; i++){
+            property.buildBuilding(board);
+        }
+
+        assertTrue(property.hasHotel());
+        assertEquals(1, board.getHotelCount());
+        assertEquals(0, board.getHouseCount());
+
+        property.removeBuilding(board);
+        assertFalse(property.hasHotel());
+        assertEquals(0, board.getHotelCount());
+        assertEquals(4, board.getHouseCount());
+
+    }
 }

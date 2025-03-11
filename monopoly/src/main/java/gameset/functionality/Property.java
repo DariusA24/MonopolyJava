@@ -173,12 +173,50 @@ public class Property {
         rent = rentWithBuildingsList.get(numHouses);
     }
 
+    /**
+     * Upgrades the property to a hotel.
+     *
+     * <p>This method is responsible for upgrading a property to a hotel.
+     * Once the property is upgraded, we have to adjust the house counters by
+     * removing four houses.
+     *
+     * @param board the board object
+     */
     private void upgradeToHotelAdjuster(Board board) {
         for (int i = 0; i < MAX_HOUSES; i++) {
-            board.adjustBuildingCounters("hotel", false);
+            board.adjustBuildingCounters("house", false);
         }
     }
 
+    /**
+     * Removes a hotel from the board.
+     *
+     * <p>This method is responsible for removing a hotel from a property.
+     * In order to remove a hotel from the property, there has to be enough houses on the board.
+     *
+     * @param board the board object
+     */
+    private boolean removeHotelAdjuster(Board board) {
+        int HOUSE_AMOUNT = 32;
+        if (HOUSE_AMOUNT - board.getHouseCount() < MAX_HOUSES) {
+           System.out.println("Not enough houses to remove hotel.");
+           return false;
+        }
+        board.adjustBuildingCounters("hotel", false);
+        for (int i = 0; i < MAX_HOUSES; i++) {
+            board.adjustBuildingCounters("house", true);
+        }
+        return true;
+    }
+
+    /**
+     * Builds a building on the property
+     *
+     * <p>This method is responsible for building a building on a property.
+     * When building we also adjust the counters on the board.
+     *
+     * @param board the board object
+     */
     public boolean buildBuilding(Board board) {
         if (hasHotel) {
             System.out.println("Unable to purchase anymore buildings on this property.");
@@ -196,6 +234,22 @@ public class Property {
             }
         }
         return false;
+    }
+    /**
+     * Removes a building from the board
+     *
+     * <p>This method is responsible for removing a building from the property.
+     *
+     * @param board the board object
+     */
+    public void removeBuilding(Board board) {
+        if (hasHotel && removeHotelAdjuster(board)) {
+           hasHotel = false;
+        }
+        else if (numHouses > 0) {
+            numHouses--;
+            board.adjustBuildingCounters("house", false);
+        }
     }
 
     private void addHouse() {
