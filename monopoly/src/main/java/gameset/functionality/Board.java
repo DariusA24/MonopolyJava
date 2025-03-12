@@ -40,13 +40,25 @@ public class Board {
     }
 
     /**
+     * Gets the properties within the specified colorset.
+     *
+     * @param color The color of the property that you want to look at.
+     * @return The properties that fit the colorset.
+     */
+    public ArrayList<Property> getPropertiesByColor(String color) {
+        return this.gameBoard.stream().filter(property -> property.getColor().equals(color))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+
+    /**
      * Gets the amount of properties within the specified colorset.
      *
      * @param color The color of the property that you want to look at.
      * @return The amount of properties that fit the colorset.
      */
     public Long getPropertiesColorCount(String color) {
-        return this.gameBoard.stream().filter(property -> property.getColor().equals(color)).count();
+        return (long) getPropertiesByColor(color).size();
     }
 
     /**
@@ -56,18 +68,15 @@ public class Board {
      * @return The list of properties names that must have buildings built on.
      * If empty, then the user can proceed to build on the property specified.
      */
-    public ArrayList<String> evenlyBuildingAcrossGroup(Property propertyToAddBuilding) {
+    public ArrayList<String> evenlyBuildingAcrossGroupWithNoMortgage(Property propertyToAddBuilding) {
         int amountOfHousesOnProperty = propertyToAddBuilding.getNumHouses();
+        ArrayList<Property> propertiesToTest = getPropertiesByColor(propertyToAddBuilding.getColor());
         ArrayList<String> propertiesNotMeetingFilter = new ArrayList<>();
-
-        propertiesNotMeetingFilter = this.gameBoard.stream()
-                .filter(property -> property.getColor().equals(propertyToAddBuilding.getColor())
-                        && (property.getNumHouses() < amountOfHousesOnProperty)
-                        && (!property.getName().equals(propertyToAddBuilding.getName())))
-                .map(Property::getName)
-                .collect(Collectors.toCollection(ArrayList::new));
-
-
+        for(Property property : propertiesToTest) {
+            if ((!property.getName().equals(propertyToAddBuilding.getName()) && (property.getNumHouses() < amountOfHousesOnProperty) || (property.isMortgaged()))) {
+                propertiesNotMeetingFilter.add(property.getName());
+            }
+        }
         return propertiesNotMeetingFilter;
     }
 

@@ -96,20 +96,6 @@ public class Player {
         colorSets.put(property.getColor(), hasMonopoly(property, board));
     }
 
-
-    /**
-     * Sells building from property.
-     *
-     * <p>This method is responsible for removing a building from the property.
-     * It also allocates money to the player for removing the building.
-     *
-     * @param board the board object
-     */
-    public void sellBuilding(Property property, Board board) throws IOException {
-        playerMoney += (property.getBuildingPrice() / 2);
-        property.removeBuilding(board);
-    }
-
     /**
      * Checks if player can purchase buildings for the property.
      *
@@ -122,10 +108,10 @@ public class Player {
      */
     public boolean canPurchaseBuilding(Property property, Board board) throws IOException {
         if (colorSets.containsKey(property.getColor()) && colorSets.get(property.getColor())) {
-            ArrayList<String> propertiesToBuildOnFirst = board.evenlyBuildingAcrossGroup(property);
+            ArrayList<String> propertiesToBuildOnFirst = board.evenlyBuildingAcrossGroupWithNoMortgage(property);
             if (!propertiesToBuildOnFirst.isEmpty()) {
                 for (String s : propertiesToBuildOnFirst) {
-                    System.out.println("Must build properties on: " + s + " first.");
+                    System.out.println("Properties that don't meet criteria: " + s);
                 }
                 return false;
             }

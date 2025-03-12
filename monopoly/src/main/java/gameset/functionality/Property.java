@@ -242,14 +242,17 @@ public class Property {
      *
      * @param board the board object
      */
-    public void removeBuilding(Board board) {
+    public boolean removeBuilding(Board board) {
         if (hasHotel && removeHotelAdjuster(board)) {
            hasHotel = false;
+           return true;
         }
         else if (numHouses > 0) {
             numHouses--;
             board.adjustBuildingCounters("house", false);
+            return true;
         }
+        return false;
     }
 
     private void addHouse() {

@@ -19,6 +19,8 @@ public class BoardTest {
     private Player playerMock;
     @Mock
     ArrayList<Property> properties = new ArrayList<>();
+    @Mock
+    ArrayList<Player> mockedPlayer = new ArrayList<>();
 
     private Board board;
 
@@ -141,7 +143,7 @@ public class BoardTest {
         ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
         ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
         ArrayList<String> list = new ArrayList<>();
-        assertEquals(list,board.evenlyBuildingAcrossGroup(properties.getFirst()));
+        assertEquals(list,board.evenlyBuildingAcrossGroupWithNoMortgage(properties.getFirst()));
     }
 
     @Test
@@ -153,6 +155,19 @@ public class BoardTest {
         list.add(properties.get(1).getName());
         Property p = properties.getFirst();
         p.buildBuilding(board);
-        assertEquals(list,board.evenlyBuildingAcrossGroup(p));
+        assertEquals(list,board.evenlyBuildingAcrossGroupWithNoMortgage(p));
     }
+
+    //TODO: Find a way to implement this test using a mocked board with the property state saved.
+//    @Test
+//    public void testEvenlyBuilding_With_Mortgage() throws IOException {
+//        // Load the property data from the JSON file
+//        ResourceParser propertyParser = new ResourceParser("/models/propertyDataTest.json");
+//        ArrayList<Property> properties = propertyParser.parseJsonToArrayList(Property.class);
+//        ArrayList<String> list = new ArrayList<>();
+//        Property p = properties.getFirst();
+//        properties.get(1).setMortgaged(true);
+//        list.add(properties.get(1).getName());
+//        assertEquals(list,board.evenlyBuildingAcrossGroupWithNoMortgage(p));
+//    }
 }
