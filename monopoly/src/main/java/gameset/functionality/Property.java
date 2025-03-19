@@ -34,6 +34,7 @@ public class Property {
     private Integer numHouses = 0;
     private boolean hasHotel;
     private Integer rent;
+    private boolean isMortgaged;
 
 
     // Constants
@@ -103,6 +104,10 @@ public class Property {
         return owner;
     }
 
+    public boolean isMortgaged() {
+        return isMortgaged;
+    }
+
     //Setters
     public void setOwner(String owner) {
         this.owner = owner;
@@ -111,6 +116,11 @@ public class Property {
     public void setRent(Integer rent) {
         this.rent = rentWithBuildingsList.get(numHouses);
     }
+
+    public void setMortgaged(boolean mortgaged) {
+        this.isMortgaged = mortgaged;
+    }
+
 
     @Override
     public String toString() {
@@ -163,14 +173,86 @@ public class Property {
         rent = rentWithBuildingsList.get(numHouses);
     }
 
-    public void buildBuilding() {
+    /**
+     * Upgrades the property to a hotel.
+     *
+     * <p>This method is responsible for upgrading a property to a hotel.
+     * Once the property is upgraded, we have to adjust the house counters by
+     * removing four houses.
+     *
+     * @param board the board object
+     */
+    private void upgradeToHotelAdjuster(Board board) {
+        for (int i = 0; i < MAX_HOUSES; i++) {
+            board.adjustBuildingCounters("house", false);
+        }
+    }
+
+    /**
+     * Removes a hotel from the board.
+     *
+     * <p>This method is responsible for removing a hotel from a property.
+     * In order to remove a hotel from the property, there has to be enough houses on the board.
+     *
+     * @param board the board object
+     */
+    private boolean removeHotelAdjuster(Board board) {
+        int HOUSE_AMOUNT = 32;
+        if (HOUSE_AMOUNT - board.getHouseCount() < MAX_HOUSES) {
+           System.out.println("Not enough houses to remove hotel.");
+           return false;
+        }
+        board.adjustBuildingCounters("hotel", false);
+        for (int i = 0; i < MAX_HOUSES; i++) {
+            board.adjustBuildingCounters("house", true);
+        }
+        return true;
+    }
+
+    /**
+     * Builds a building on the property
+     *
+     * <p>This method is responsible for building a building on a property.
+     * When building we also adjust the counters on the board.
+     *
+     * @param board the board object
+     */
+    public boolean buildBuilding(Board board) {
         if (hasHotel) {
             System.out.println("Unable to purchase anymore buildings on this property.");
+            return false;
         } else if (numHouses == MAX_HOUSES) {
-            addHotel();
+            if (board.adjustBuildingCounters("hotel", true)) {
+                addHotel();
+                upgradeToHotelAdjuster(board);
+                return true;
+            }
         } else {
-            addHouse();
+            if (board.adjustBuildingCounters("house", true)) {
+                addHouse();
+                return true;
+            }
         }
+        return false;
+    }
+    /**
+     * Removes a building from the board
+     *
+     * <p>This method is responsible for removing a building from the property.
+     *
+     * @param board the board object
+     */
+    public boolean removeBuilding(Board board) {
+        if (hasHotel && removeHotelAdjuster(board)) {
+           hasHotel = false;
+           return true;
+        }
+        else if (numHouses > 0) {
+            numHouses--;
+            board.adjustBuildingCounters("house", false);
+            return true;
+        }
+        return false;
     }
 
     private void addHouse() {

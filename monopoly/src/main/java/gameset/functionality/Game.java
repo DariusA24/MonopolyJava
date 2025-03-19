@@ -66,21 +66,54 @@ public class Game {
      * @param player the player object
      * @param property object which the building will be added to
      */
-    private void purchaseBuildings(Property property, Player player) {
-        if (player.canPurchaseBuilding(property.getColor())) {
-            int cost = property.getBuildingPrice();
-            if (player.getMoney() - cost >= 0) {
-                player.setMoney(player.getMoney() - cost);
-                property.buildBuilding();
-                System.out.println("You purchased your " + property.getNumHouses() + " houses of " + property.displayPropertyName());
-            }
-            else {
-                System.out.println("Unable to purchase building due to insufficient funds");
-            }
+    private void purchaseBuildings(Property property, Player player) throws IOException {
+        if (!player.canPurchaseBuilding(property, board)) {
+            System.out.println("Unable to purchase building due to not having all properties of the color set for: " + property.getColor());
+            return;
         }
-        else {
-            System.out.println("Unable to purchase building due to you not having all colorset for: " + property.getColor());
+
+        int cost = property.getBuildingPrice();
+
+        if (property.isMortgaged()) {
+            System.out.println("Unable to purchase buildings on a mortgaged property.");
+            return;
         }
+
+        if (cost > player.getMoney()) {
+            System.out.println("Unable to purchase building due to insufficient funds.");
+            return;
+        }
+
+        if (!property.buildBuilding(board)) {
+            System.out.println("No more buildings allowed to be purchased.");
+            return;
+        }
+
+        player.setMoney(player.getMoney() - cost);
+        System.out.println("You now have " + property.getNumHouses() + " house(s) on " + property.displayPropertyName());
+    }
+
+    /**
+     * Sells building from property.
+     *
+     * <p>This method is responsible for removing a building from the property.
+     * It also allocates money to the player for removing the building.
+     *
+     * @param property the board object
+     * @player player object
+     */
+    private void sellingBuildings(Property property, Player player) throws IOException {
+       if (property.getNumHouses() == 0) {
+           System.out.println("No buildings to sell on: " + property.displayPropertyName());
+       }
+       else if (property.removeBuilding(board)) {
+           int playerMoney = player.getMoney();
+           player.setMoney(playerMoney + property.getBuildingPrice() / 2);
+           System.out.println("Selling building on: " + property.displayPropertyName());
+       }
+       else {
+           System.out.println("Unable to sell buildings on this property.");
+       }
     }
 
     /**
@@ -130,13 +163,15 @@ public class Game {
                 purchaseProperty(property, player);
 
             }
-        } else {
+        } else if (!property.getOwner().equals(player.getName())) {
             int rentDue = property.getRent(this.dice.getRollTotal());
             System.out.println("Property is owned by: " + property.getOwner());
             System.out.println("Rent is: " + rentDue);
             System.out.println("Transaction details: " + player.getMoney() + " - " + rentDue);
             player.setMoney(player.getMoney() - rentDue);
-
+        }
+        else {
+            System.out.println("Property owned by: " + property.getOwner());
         }
     }
 
@@ -267,11 +302,19 @@ public class Game {
         while (!choice.equals("1")) {
             if (choice.equals("2")) {
                 player.displayProperties(this);
-                if (!player.getProperties().isEmpty()) {
-                    int purchasedBuilding = buildingScreen.displayPropertyScreen(player, userInput);
-                    if (purchasedBuilding != 0) {
-                        Property property = player.getProperties().get(purchasedBuilding - 1);
-                        purchaseBuildings(property, player);
+                if(!player.getProperties().isEmpty()) {
+                    int selectedBuilding = buildingScreen.displayPropertySelectScreen(player, userInput);
+                    if (selectedBuilding != 0) {
+                      System.out.println("Selected building: " + selectedBuilding + System.lineSeparator());
+                      int buildingOption = buildingScreen.displayBuildingOptionScreen(player, userInput);
+                      if (buildingOption == 1) {
+                         Property property = player.getProperties().get(selectedBuilding - 1);
+                         purchaseBuildings(property, player);
+                      }
+                      if (buildingOption == 2) {
+                          Property property = player.getProperties().get(selectedBuilding - 1);
+                          sellingBuildings(property, player);
+                      }
                     }
                 }
             }

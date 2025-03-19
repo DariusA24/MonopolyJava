@@ -6,12 +6,15 @@ import gameutils.Ansi;
 import gameutils.ResourceParser;
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Board {
     private final HashMap<String, Integer> playerPositions = new HashMap<>();
     private final ArrayList<Property> gameBoard;
     private final Deck<ChanceCard> chanceCards;
     private final Deck<CommunityChestCard> communityChestCards;
+    private int house_counter;
+    private int hotel_counter;
 
     public Board(ArrayList<Player> players) throws IOException {
         ResourceParser propertyParser = new ResourceParser("/models/propertyData.json");
@@ -20,6 +23,8 @@ public class Board {
         this.gameBoard = propertyParser.parseJsonToArrayList(Property.class);
         this.chanceCards = new Deck<>(chanceCardParser.parseJsonToArrayList(ChanceCard.class));
         this.communityChestCards = new Deck<>(communityChestCardParser.parseJsonToArrayList(CommunityChestCard.class));
+        this.house_counter = 0;
+        this.hotel_counter = 0;
         players.forEach(p -> playerPositions.put(p.getNameNoColor(), 0));
     }
 
@@ -34,12 +39,57 @@ public class Board {
         System.out.println(" Passed Go, Collect: " + Ansi.ANSI_GREEN + " $200 " + Ansi.ANSI_RESET);
     }
 
+    /**
+     * Gets the properties within the specified colorset.
+     *
+     * @param color The color of the property that you want to look at.
+     * @return The properties that fit the colorset.
+     */
+    public ArrayList<Property> getPropertiesByColor(String color) {
+        return this.gameBoard.stream().filter(property -> property.getColor().equals(color))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+
+    /**
+     * Gets the amount of properties within the specified colorset.
+     *
+     * @param color The color of the property that you want to look at.
+     * @return The amount of properties that fit the colorset.
+     */
     public Long getPropertiesColorCount(String color) {
-        return this.gameBoard.stream().filter(property -> property.getColor().equals(color)).count();
+        return (long) getPropertiesByColor(color).size();
+    }
+
+    /**
+     * Checks if all the properties have the same amount of houses before allowing player to build a new house.
+     *
+     * @param propertyToAddBuilding The property that the player wants to build a new house on.
+     * @return The list of properties names that must have buildings built on.
+     * If empty, then the user can proceed to build on the property specified.
+     */
+    public ArrayList<String> evenlyBuildingAcrossGroupWithNoMortgage(Property propertyToAddBuilding) {
+        int amountOfHousesOnProperty = propertyToAddBuilding.getNumHouses();
+        ArrayList<Property> propertiesToTest = getPropertiesByColor(propertyToAddBuilding.getColor());
+        ArrayList<String> propertiesNotMeetingFilter = new ArrayList<>();
+        for(Property property : propertiesToTest) {
+            if ((!property.getName().equals(propertyToAddBuilding.getName()) && (property.getNumHouses() < amountOfHousesOnProperty) || (property.isMortgaged()))) {
+                propertiesNotMeetingFilter.add(property.getName());
+            }
+        }
+        return propertiesNotMeetingFilter;
     }
 
     public Property getProperty(int location) {
         return this.gameBoard.get(location);
+    }
+
+    public int getHouseCount() {
+        return this.house_counter;
+    }
+
+    public int getHotelCount() {
+        return this.hotel_counter;
     }
 
     /**
@@ -78,6 +128,45 @@ public class Board {
 
     public Deck<CommunityChestCard> getCommunityChestCards() {
         return communityChestCards;
+    }
+
+    /**
+     * Returns if the house/hotel counter has been adjusted based on what the event was.
+     *
+     * @param buildingType the type of building that needs to adjust the counter.
+     * @param buying whether buying or selling
+     * @return If the counters have been adjusted
+     */
+    public boolean adjustBuildingCounters(String buildingType, boolean buying) {
+        int HOUSE_AMOUNT = 32;
+        int HOTEL_AMOUNT = 12;
+        if (buildingType.equalsIgnoreCase("house")) {
+            if (buying) {
+                house_counter++;
+                if (house_counter > HOUSE_AMOUNT) {
+                    house_counter--;
+                    return false;
+                }
+                return true;
+            } else {
+                if (house_counter > 0) {
+                    house_counter--;
+                }
+            }
+        } else if (buildingType.equalsIgnoreCase("hotel")) {
+            if (buying) {
+                hotel_counter++;
+                if (hotel_counter > HOTEL_AMOUNT) {
+                    hotel_counter--;
+                    return false;
+                }
+            } else {
+                if (hotel_counter > 0) {
+                    hotel_counter--;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
