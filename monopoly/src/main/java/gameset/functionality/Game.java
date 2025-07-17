@@ -259,7 +259,7 @@ public class Game {
         Player[] tradablePlayers = playerList.stream().filter(p -> !p.getNameNoColor().equals(player.getNameNoColor())).toArray(Player[]::new);
         Player tradeWithPlayer = gameScreen.tradeScreen(userInput, tradablePlayers);
         // handle trade
-        gameScreen.tradeExchange(userInput, player, tradeWithPlayer);
+        gameScreen.tradeExchangeScreen(userInput, player, tradeWithPlayer);
     }
 
     /**
