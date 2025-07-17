@@ -10,6 +10,7 @@ import gameutils.Ansi;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game {
     private ArrayList<Player> playerList = new ArrayList<Player>();
@@ -254,6 +255,13 @@ public class Game {
             }
     }
 
+    private void handlePlayerTrade(Player player) {
+        Player[] tradablePlayers = playerList.stream().filter(p -> !p.getNameNoColor().equals(player.getNameNoColor())).toArray(Player[]::new);
+        Player tradeWithPlayer = gameScreen.tradeScreen(userInput, tradablePlayers);
+        // handle trade
+        gameScreen.tradeExchange(userInput, player, tradeWithPlayer);
+    }
+
     /**
      * @param player
      * @return where the player landed on the board
@@ -319,7 +327,7 @@ public class Game {
                 }
             }
             if (choice.equals("3")) {
-                System.out.println("Choice not yet made");
+                handlePlayerTrade(player);
             }
             choice = gameScreen.turnMenu(userInput);
         }
