@@ -105,7 +105,7 @@ public class GameScreen {
         // TODO: for some reason the other player is not aligned with the rest of the table
         table.addSection(
                 new Section(
-                        new TableHeader("Initiator: " + player.getName(), "Other Player: " + tradingWith.getName())
+                        new TableHeader("Initiator: " + player.getNameNoColor(), "Other Player: " + tradingWith.getNameNoColor())
                 )
         );
         // TODO: make curser dynamic [x] or [ ] and also have > or < to indicate selected
@@ -160,26 +160,32 @@ interface TableProperties {
 }
 
 class Table implements TableProperties {
+    int maxLength;
     ArrayList<Section> sections;
 
     Table(ArrayList<Section> sections) {
         this.sections = sections;
+        this.maxLength = maxLength();
     }
 
     Table() {
         this.sections = new ArrayList<>();
+        this.maxLength = maxLength();
     }
 
     public void addSection(Section section) {
         this.sections.add(section);
+        this.maxLength = maxLength();
     }
 
     public void removeSection(Section section) {
         this.sections.remove(section);
+        this.maxLength = maxLength();
     }
 
     public void updateSection(int index, Section section) {
         this.sections.set(index, section);
+        this.maxLength = maxLength();
     }
 
     public int maxLength() {
@@ -195,7 +201,7 @@ class Table implements TableProperties {
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (Section d : sections) {
-            s.append(d.toString(this.maxLength()));
+            s.append(d.toString(this.maxLength));
             s.append(System.lineSeparator());
         }
         return s.toString();
@@ -203,29 +209,35 @@ class Table implements TableProperties {
 }
 
 class Section implements TableProperties {
+    int maxLength;
     TableHeader header;
     ArrayList<TableRow> rows;
 
     Section(TableHeader header, ArrayList<TableRow> rows) {
         this.header = header;
         this.rows = rows;
+        this.maxLength = maxLength();
     }
 
     Section(TableHeader header) {
         this.header = header;
         this.rows = new ArrayList<>();
+        this.maxLength = maxLength();
     }
 
     public void addRow(TableRow r) {
         this.rows.add(r);
+        this.maxLength = maxLength();
     }
 
     public void removeRow(TableRow r) {
         this.rows.remove(r);
+        this.maxLength = maxLength();
     }
 
     public void updateRow(int index, TableRow r) {
         this.rows.set(index, r);
+        this.maxLength = maxLength();
     }
 
     public int maxLength() {
@@ -258,22 +270,24 @@ class Section implements TableProperties {
 interface TableData {
     int getCols();
     String[] getData();
-
 }
 
 class TableHeader implements TableData, TableProperties {
+    int maxLength;
     int cols;
     ArrayList<String> data;
 
     TableHeader(ArrayList<String> data) {
         this.data = data;
         this.cols = data.size();
+        this.maxLength = maxLength();
     }
 
 
     TableHeader(String... strings) {
         this.data = new ArrayList<>(Arrays.asList(strings));
         this.cols = data.size();
+        this.maxLength = maxLength();
     }
 
     public int getCols() {
@@ -304,17 +318,20 @@ class TableHeader implements TableData, TableProperties {
 }
 
 class TableRow implements TableData, TableProperties {
+    int maxLength;
     int cols;
     ArrayList<String> data;
 
     TableRow(int cols, ArrayList<String> data) {
         this.cols = cols;
         this.data = data;
+        this.maxLength = maxLength();
     }
 
     TableRow(String... strings) {
         this.data = new ArrayList<>(Arrays.asList(strings));
         this.cols = data.size();
+        this.maxLength = maxLength();
     }
 
     public int getCols() {
