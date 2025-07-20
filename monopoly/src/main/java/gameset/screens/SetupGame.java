@@ -1,5 +1,7 @@
 package gameset.screens;
 
+import gameset.functionality.Game;
+
 import java.io.IOException;
 
 public class SetupGame extends AbstractScreen {
@@ -67,11 +69,9 @@ public class SetupGame extends AbstractScreen {
                                 playerNames[playerIndex++] = currentInput;
                                 currentInput = "";
                                 if (playerIndex == numberOfPlayers) {
-                                    // TODO: create a game
-                                    // Game game = new Game(numberOfPlayers, playerNames);
+                                    Game game = new Game(numberOfPlayers, playerNames);
+                                    this.setNextScreen(() -> new DeterminePlayerOrder(game));
                                     this.setFinished(true);
-                                    // TODO: set to the Game screen and pass the game
-                                    // this.setNextScreen(() -> new MainMenu());
                                 }
                             }
                         }
