@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class Game {
+    private int numberOfPlayers;
     private ArrayList<Player> playerList = new ArrayList<Player>();
     private final Dice dice = new Dice();
     private Scanner userInput = new Scanner(System.in);
@@ -357,4 +358,8 @@ public class Game {
             } else turnTrack++;
         }
     }
+
+
+    // -- NEW code from refactoring --
+    Game(){}
 }

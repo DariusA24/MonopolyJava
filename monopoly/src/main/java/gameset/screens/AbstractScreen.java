@@ -27,13 +27,15 @@ public abstract class AbstractScreen {
      */
     public final AbstractScreen render() {
         try {
-            disableLineBuffering();
+            enableRawMode();
             // Ensure restore on exit
             Runtime.getRuntime().addShutdownHook(new Thread(AbstractScreen::restoreTerminal));
 
             long frameDelay = 1000 / fps;
             long lastTime = System.currentTimeMillis();
-            handleInput();
+            Thread thread = new Thread(this::handleInput);
+            thread.setDaemon(true);
+            thread.start();
             while (!finished) {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - lastTime >= frameDelay) {
@@ -42,8 +44,12 @@ public abstract class AbstractScreen {
                     draw();
                 }
             }
+            thread.interrupt();
             clearAll();
             return getNextScreen();
+        } catch (Exception e) {
+            System.err.println("Error in render: " + e.getMessage());
+            return null;
         } finally {
             // Ensure the terminal is always restored when the screen is done
             restoreTerminal();
@@ -59,10 +65,6 @@ public abstract class AbstractScreen {
         this.nextScreenSupplier = nextScreenSupplier;
     }
 
-    /**
-     * Gets the next screen to be displayed.
-     * @return The next screen instance, or null if no next screen is set
-     */
     /**
      * Gets the next screen to be displayed.
      *
@@ -86,11 +88,11 @@ public abstract class AbstractScreen {
     }
 
     /// Note this only works on Linux and MacOS
-    private static void disableLineBuffering() {
+    private static void enableRawMode() {
         try {
             new ProcessBuilder("sh", "-c", "stty -icanon -echo < /dev/tty").inheritIO().start().waitFor();
         } catch (Exception e) {
-            System.err.println("Could not disable line buffering: " + e.getMessage());
+            System.err.println("Could not enable raw mode: " + e.getMessage());
         }
     }
 

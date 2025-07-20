@@ -41,23 +41,19 @@ public class Startup extends AbstractScreen {
 
     @Override
     protected void handleInput() {
-        Thread thread = new Thread(() -> {
-            try {
-                int ch = System.in.read();
-                if (ch == 'q' || ch == 'Q') {
-                    System.exit(0);
-                } else {
-                    // Set the next screen to be MainMenu when any key is pressed
-                    setNextScreen(MainMenu::new);
-                    setFinished(true);
-                }
-            } catch (IOException e) {
-                System.err.println("Error reading input: " + e.getMessage());
+        try {
+            int ch = System.in.read();
+            if (ch == 'q' || ch == 'Q') {
+                System.exit(0);
+            } else {
+                // Set the next screen to be MainMenu when any key is pressed
+                setNextScreen(MainMenu::new);
                 setFinished(true);
             }
-        });
-        thread.setDaemon(true);
-        thread.start();
+        } catch (IOException e) {
+            System.err.println("Error reading input: " + e.getMessage());
+            setFinished(true);
+        }
     }
 
     @Override
