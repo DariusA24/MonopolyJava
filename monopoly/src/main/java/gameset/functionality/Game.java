@@ -356,10 +356,14 @@ public class Game {
 
 
     // -- NEW code from refactoring --
+    private Board board;
+    private Dice dice;
     private int numberOfPlayers;
     private ArrayList<Player> playerList;
 
+
     public Game(int numberOfPlayers, String[] playerNames) throws IOException {
+        this.dice = new Dice();
         this.numberOfPlayers = numberOfPlayers;
         this.playerList = new ArrayList<>(this.numberOfPlayers);
         ArrayList<String> colors = new ArrayList<>(Arrays.asList(Ansi.ColorList));
@@ -368,6 +372,8 @@ public class Game {
             Player player = new Player(name, 1500, colors.remove((int) (Math.random() * colors.size())));
             playerList.add(player);
         }
+
+        this.board = new Board(playerList);
     }
 
     /**
@@ -381,5 +387,13 @@ public class Game {
 
     public ArrayList<Player> getPlayerList() {
         return playerList;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public Dice getDice() {
+        return dice;
     }
 }

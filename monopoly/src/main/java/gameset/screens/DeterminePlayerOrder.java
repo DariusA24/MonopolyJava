@@ -12,7 +12,6 @@ import java.util.Map;
 
 public class DeterminePlayerOrder extends AbstractScreen {
     private Game game;
-    private Dice dice;
     private final LinkedList<String> playersLeftToRoll;
     private final HashMap<String, Integer> playerRolls = new HashMap<>();
     private ArrayList<Player> sortedPlayerList;
@@ -26,7 +25,6 @@ public class DeterminePlayerOrder extends AbstractScreen {
 
     public DeterminePlayerOrder(Game game) {
         this.game = game;
-        this.dice = new Dice();
         this.playersLeftToRoll = new LinkedList<>(game.getPlayerList().stream().map(Player::getNameNoColor).toList());
         this.currentState = State.ROLLING;
     }
@@ -37,7 +35,7 @@ public class DeterminePlayerOrder extends AbstractScreen {
         switch (currentState) {
             case ROLLING -> System.out.println(playersLeftToRoll.getFirst() + "... Press any key to roll");
             case SHOWING_RESULTS -> {
-                System.out.println("You rolled a " + dice.getRollTotal());
+                System.out.println("You rolled a " + game.getDice().getRollTotal());
                 System.out.println("Press any key to hand over roll to the next player...");
             }
             case SHOW_WINNER -> {
@@ -58,8 +56,8 @@ public class DeterminePlayerOrder extends AbstractScreen {
 
                 switch (currentState) {
                     case ROLLING -> {
-                        dice.rollDice();
-                        playerRolls.put(playersLeftToRoll.getFirst(), dice.getRollTotal());
+                        game.getDice().rollDice();
+                        playerRolls.put(playersLeftToRoll.getFirst(), game.getDice().getRollTotal());
                         playersLeftToRoll.removeFirst();
                         currentState = State.SHOWING_RESULTS;
                     }

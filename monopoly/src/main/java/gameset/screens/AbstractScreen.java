@@ -3,7 +3,7 @@ package gameset.screens;
 import java.util.function.Supplier;
 
 public abstract class AbstractScreen {
-    private final int fps = 30;
+    private final int fps = 12;
     private volatile boolean finished = false;
     private Supplier<? extends AbstractScreen> nextScreenSupplier = null;
 
