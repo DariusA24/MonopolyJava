@@ -4,7 +4,6 @@ import gameutils.Ansi;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import java.util.ArrayList;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -141,16 +140,11 @@ public class Property {
      * Displays the property with the correct property color.
      */
     public String displayPropertyName() {
-        Ansi ansi = new Ansi();
-        return (ansi.propertyToAnsiColor(this.color) + this.name + Ansi.ANSI_RESET);
+        return Ansi.wrapAnsi(this.name, this.color);
     }
 
     public String displayPropertyName(int maxLength) {
-        Ansi ansi = new Ansi();
-        if (this.name.length() > maxLength) {
-            return (ansi.propertyToAnsiColor(this.color) + this.name.substring(0, maxLength) + Ansi.ANSI_RESET);
-        }
-        return (ansi.propertyToAnsiColor(this.color) + Board.centerString(this.name, maxLength) + Ansi.ANSI_RESET);
+        return Ansi.wrapAnsi(this.name.substring(0, Math.min(this.name.length(), maxLength)), this.color);
     }
 
     /**

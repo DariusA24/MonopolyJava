@@ -12,7 +12,7 @@ public class Ansi {
 
     public static final String[] ColorList = {ANSI_CYAN, ANSI_PURPLE, ANSI_RED, ANSI_BLUE, ANSI_WHITE};
 
-    public String propertyToAnsiColor(String color) {
+    public static String propertyToAnsiColor(String color) {
         return switch (color) {
             case "red" -> ANSI_RED;
             case "blue" -> ANSI_BLUE;
@@ -22,5 +22,17 @@ public class Ansi {
             case "cyan" -> ANSI_CYAN;
             default -> ANSI_WHITE;
         };
+    }
+
+    public static String stripAnsi(String s) {
+        return s.replaceAll("\u001B\\[[;\\d]*m", "");
+    }
+
+    public static String wrapAnsi(String s, String color) {
+        String coloredStr = "";
+        coloredStr += propertyToAnsiColor(color);
+        coloredStr += s;
+        coloredStr += ANSI_RESET;
+        return coloredStr;
     }
 }
