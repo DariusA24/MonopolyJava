@@ -1,8 +1,12 @@
 package gameset.screens;
 
 import java.util.function.Supplier;
+import java.io.*;
+import java.util.*;
 
 public abstract class AbstractScreen {
+    private int lines;
+    private int columns;
     private final int fps = 12;
     private volatile boolean finished = false;
     private Supplier<? extends AbstractScreen> nextScreenSupplier = null;
@@ -31,6 +35,7 @@ public abstract class AbstractScreen {
             // Ensure restore on exit
             Runtime.getRuntime().addShutdownHook(new Thread(AbstractScreen::restoreTerminal));
 
+            this.setDimensions();
             long frameDelay = 1000 / fps;
             long lastTime = System.currentTimeMillis();
             Thread thread = new Thread(this::handleInput);
@@ -63,6 +68,14 @@ public abstract class AbstractScreen {
      */
     protected final void setNextScreen(Supplier<? extends AbstractScreen> nextScreenSupplier) {
         this.nextScreenSupplier = nextScreenSupplier;
+    }
+
+    public int getLines() {
+        return this.lines;
+    }
+
+    public int getColumns() {
+        return this.columns;
     }
 
     /**
@@ -103,5 +116,20 @@ public abstract class AbstractScreen {
         } catch (Exception e) {
             System.err.println("Could not restore terminal settings: " + e.getMessage());
         }
+    }
+
+    /**
+     * This method utilizes UNIX based approach to obtain the number of lines/cols in the current
+     * terminal session.
+     */
+    private void setDimensions() throws IOException, InterruptedException {
+        ProcessBuilder pb = new ProcessBuilder("bash", "-c", "stty size < /dev/tty");
+        Process process = pb.start();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String[] parts = reader.readLine().trim().split(" ");
+        int lines = Integer.parseInt(parts[0]);
+        int cols = Integer.parseInt(parts[1]);
+        this.lines = lines;
+        this.columns = cols;
     }
 }
